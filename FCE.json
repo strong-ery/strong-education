@@ -1,0 +1,47 @@
+{
+    "ecosystem": "Boreal Forest",
+    "organisms": [
+        {
+            "name": "Oak Tree",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "A large tree that produces acorns.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftreesourlifeline.weebly.com%2Fuploads%2F1%2F4%2F3%2F9%2F143936547%2Fshrubs-bushes-hd7092-64-1000_orig.jpg&f=1&nofb=1&ipt=65529bf6bfbc94429bf53d7305f79c0fcb127d3b61575addf51d621adbdecac3&ipo=images"
+        },
+        {
+            "name": "Squirrel",
+            "autotroph": false,
+            "category": "Herbivore",
+            "description": "A small rodent that feeds on acorns.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fonlinetools.com%2Fimages%2Fexamples-onlineimagetools%2Fsquirrel-eating-nut.webp&f=1&nofb=1&ipt=6f8304a9618927584867f6c3b9b5a0e5c2e882b58a11ca7934d3607084526ddb&ipo=images"
+        },
+        {
+            "name": "Fox",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A carnivore that hunts squirrels and rabbits.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi0.wp.com%2Fwww.roeselienraimond.com%2Fwp-content%2Fuploads%2F2016%2F07%2Ffantastic_mr_fox.jpg&f=1&nofb=1&ipt=a4ec4e10ba4d87b9cf7e22a70ccae1b82881802f415d204de42cfb0947d44470&ipo=images"
+        },
+        {
+            "name": "Wolf",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A large predator that hunts foxes, hawks, and rabbits.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F15%2F3a%2F1a%2F153a1aa9350e2a7d0a657c59173ec73a.jpg&f=1&nofb=1&ipt=36231e561937a3406b07b37b3cd38ce30675eb62e19fb9b04e7d4c8ee760d6a4&ipo=images"
+        },
+        {
+            "name": "Black Bear",
+            "autotroph": false,
+            "category": "Aquatic eater thing",
+            "description": "Dumb bear I.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.theanimalspot.com%2Fwp-content%2Fuploads%2F2019%2F01%2Famericanblackbearsmall.jpg&f=1&nofb=1&ipt=9e1d8d40bed36ec7cf0d0ae4e68e80de78d678466eeed31189dded262adf07f9&ipo=images"
+        }
+    ],
+    "relationships": [
+        { "feeding_animal": "Squirrel", "food_animal": "Oak Tree" },
+        { "feeding_animal": "Fox", "food_animal": "Squirrel" },
+        { "feeding_animal": "Wolf", "food_animal": "Fox" },
+        { "feeding_animal": "Black Bear", "food_animal": "Wolf" }
+
+    ]
+}

@@ -1,0 +1,57 @@
+{
+    "ecosystem": "Low Biodiversity Desert",
+    "organisms": [
+        {
+            "name": "Cactus",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "Plant",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.picturethisai.com%2Fwiki-image%2F1080%2FBAEC2BD39E09405C95A8734CA7BAB8F6.jpeg&f=1&nofb=1&ipt=102d542872dbcebb19cc3e327107bcd4e829dc1e31823ffb89ab877ad9db102e&ipo=images"
+        },
+        {
+            "name": "Desert Grass",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "Plant",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpreview.turbosquid.com%2FPreview%2F2014%2F07%2F09__10_44_42%2F0002_desert_grass.jpg32f9d120-4f6e-4906-97af-75d16810a8e3Original.jpg&f=1&nofb=1&ipt=1341d00c1a78b4a7ae12967fe813e88fe293f07428251bf975c081fe41c2d778&ipo=images"
+        },
+        {
+            "name": "Desert Hare",
+            "autotroph": false,
+            "category": "Animal",
+            "description": "Animal",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F0e%2F40%2F24%2F0e40240f0f207f93b05e01875f65e207.jpg&f=1&nofb=1&ipt=4a56f8948e55a3e96169274bb38879b48b1eaa4917b40b31f7c07a25f01a1ed4&ipo=images"
+        },
+        {
+            "name": "Rattlesnake",
+            "autotroph": false,
+            "category": "Animal",
+            "description": "Animal",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.desertusa.com%2Ffood_chain_k12%2Fimages%2Fdiamondback-rattler.jpg&f=1&nofb=1&ipt=66bffc56cad5ec52646a0f92575619207ba60fdc25ea550f5fb643365ebf90f0&ipo=images"
+        },
+        {
+            "name": "Vulture",
+            "autotroph": false,
+            "category": "Animal",
+            "description": "Animal",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.collinsdictionary.com%2Fimages%2Ffull%2Fvulture_8677693.jpg&f=1&nofb=1&ipt=bb873589c2c9c503d2a1f85a1dc5c7115fb998181ed53782a7fde05d07005800&ipo=images"
+        },
+        {
+            "name": "Hawk",
+            "autotroph": false,
+            "category": "Animal",
+            "description": "Animal",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Finaturalist-open-data.s3.amazonaws.com%2Fphotos%2F971%2Flarge.jpg&f=1&nofb=1&ipt=ff8466f0a565b94428b959f77a805f2428cf3901489380e1f957473dd19bd45d&ipo=images"
+        }
+        
+    ],
+    "relationships": [
+        { "feeding_animal": "Desert Hare", "food_animal": "Cactus" },
+        { "feeding_animal": "Desert Hare", "food_animal": "Desert Grass" },
+        { "feeding_animal": "Rattlesnake", "food_animal": "Desert Hare" },
+        { "feeding_animal": "Vulture", "food_animal": "Desert Hare" },
+        { "feeding_animal": "Hawk", "food_animal": "Desert Hare" },
+        { "feeding_animal": "Hawk", "food_animal": "Rattlesnake" },
+        { "feeding_animal": "Hawk", "food_animal": "Vulture" }
+    ]
+}

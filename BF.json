@@ -1,0 +1,184 @@
+{
+    "ecosystem": "High Biodiversity Boreal Forest",
+    "organisms": [
+        {
+            "name": "Oak Tree",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "A large tree that produces acorns.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftreesourlifeline.weebly.com%2Fuploads%2F1%2F4%2F3%2F9%2F143936547%2Fshrubs-bushes-hd7092-64-1000_orig.jpg&f=1&nofb=1&ipt=65529bf6bfbc94429bf53d7305f79c0fcb127d3b61575addf51d621adbdecac3&ipo=images"
+        },
+        {
+            "name": "Spruce Tree",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "A large tree that never loses its leaves.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpng.pngtree.com%2Fpng-clipart%2F20231018%2Foriginal%2Fpngtree-pine-tree-isolated-png-image_13342945.png&f=1&nofb=1&ipt=89621986c4feae82c0cacb65ae4fc42f69bb3558c9b9ce11e9548e260c01a0dd&ipo=images"
+        },
+        {
+            "name": "Grass",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "Common ground-covering vegetation.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.hedgesblog.co.uk%2Fwp-content%2Fuploads%2F2019%2F06%2Fgrass.jpg&f=1&nofb=1&ipt=2fb5c9b435b4ce6ba4d66d3313565aa3b7d3e701ea5052929375615e32be51cc&ipo=images"
+        },
+        {
+            "name": "Berry Bush",
+            "autotroph": true,
+            "category": "Plant",
+            "description": "A shrub that produces berries.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.rocketgardens.co.uk%2Fwp-content%2Fuploads%2F2016%2F02%2FBrigitta20Blueberry20Plant.jpg&f=1&nofb=1&ipt=3d700d4a552b7267e5d2339c4ddedd2d8013384bc55360d4ca92678625e5409f&ipo=images"
+        },
+        {
+            "name": "Squirrel",
+            "autotroph": false,
+            "category": "Herbivore",
+            "description": "A small rodent that feeds on acorns.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fonlinetools.com%2Fimages%2Fexamples-onlineimagetools%2Fsquirrel-eating-nut.webp&f=1&nofb=1&ipt=6f8304a9618927584867f6c3b9b5a0e5c2e882b58a11ca7934d3607084526ddb&ipo=images"
+        },
+        {
+            "name": "Rabbit",
+            "autotroph": false,
+            "category": "Herbivore",
+            "description": "A small mammal that eats grass and plants.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F020%2F217%2F029%2Flarge_2x%2Ffront-view-of-cute-baby-white-rabbit-on-white-background-white-rabbit-portrait-looking-frontwise-to-viewer-photo.jpg&f=1&nofb=1&ipt=a651d149b98d3d673eea8264717a704b5dc31675fb7e6e8f9cd6bbff4133c5f0&ipo=images"
+        },
+        {
+            "name": "Deer",
+            "autotroph": false,
+            "category": "Herbivore",
+            "description": "A large herbivorous mammal that feeds on shrubs and grass.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F4.bp.blogspot.com%2F-HxmEz2kA7DA%2FTq0NEL6qChI%2FAAAAAAAAC88%2Fk77TJXx4KIw%2Fs1600%2Fdeer_pictures_wallpapers_beautiful_animals_wildlife_forest_background.jpg&f=1&nofb=1&ipt=6fedfb1c65aaad57b44ebdf21a58b8f858bddc8650804c2762ba0b66b56ca435&ipo=images"
+        },
+        {
+            "name": "Fox",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A carnivore that hunts squirrels and rabbits.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi0.wp.com%2Fwww.roeselienraimond.com%2Fwp-content%2Fuploads%2F2016%2F07%2Ffantastic_mr_fox.jpg&f=1&nofb=1&ipt=a4ec4e10ba4d87b9cf7e22a70ccae1b82881802f415d204de42cfb0947d44470&ipo=images"
+        },
+        {
+            "name": "Hawk",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A bird of prey that hunts small mammals.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.natgeofe.com%2Fk%2F56ca7dfa-45e3-4a82-b92b-d93c1ce2bd05%2Fred-tailed-hawk-flying-hunting_square.jpg&f=1&nofb=1&ipt=e0e9e8ddbdd1433e314dbab6cf7395f40ae60e8c8f1a4703752776f16e02600c&ipo=images"
+        },
+        {
+            "name": "Wolf",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A large predator that hunts foxes, hawks, and rabbits.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F15%2F3a%2F1a%2F153a1aa9350e2a7d0a657c59173ec73a.jpg&f=1&nofb=1&ipt=36231e561937a3406b07b37b3cd38ce30675eb62e19fb9b04e7d4c8ee760d6a4&ipo=images"
+        },
+        {
+            "name": "Eagle",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A large bird of prey that hunts foxes and rabbits.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flive.staticflickr.com%2F66%2F199904228_cbb71ec0d0_b.jpg&f=1&nofb=1&ipt=8c658523dda2e233a478b2a423d09f026cc678a9c7fe115c1addcb1aa98fdcff&ipo=images"
+        },
+        {
+            "name": "Weasel",
+            "autotroph": false,
+            "category": "Carnivore",
+            "description": "A small, agile carnivore that preys on smaller animals like rodents.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhogarthspestcontrol.com%2Fwp-content%2Fuploads%2F2019%2F01%2Fshutterstock_1203553492.jpg&f=1&nofb=1&ipt=a930998afa03d4c18faed6bfe7027729affe5d47f885cb3e3f3ad240eff7c2eb&ipo=images"
+        },
+        {
+            "name": "Bark Beetle",
+            "autotroph": false,
+            "category": "Herbivore",
+            "description": "Dumb beetle.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.TivrMZj5qh_RycZH-Hgr1QHaHa%26pid%3DApi&f=1&ipt=fc0b915b3c11df4b730ce7617b25c61c0a8c772922523ac148ce808d0ec7b3c2&ipo=images"
+        },
+        {
+            "name": "Chickadee",
+            "autotroph": false,
+            "category": "Omnivore",
+            "description": "Dumb bird.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.metroparks.com%2Fwp-content%2Fuploads%2F2020%2F12%2Fchickadee-1320x1320.jpg&f=1&nofb=1&ipt=31ca16e58e93d9e6db7690f4c31bed9caf28a57e0db9ba7cc050f749165e9f01&ipo=images"
+        },
+        {
+            "name": "Salmon",
+            "autotroph": false,
+            "category": "Aquatic",
+            "description": "Dumb fish.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.natgeofe.com%2Fn%2F613fd3bf-e509-4b81-b31a-0525d7ae20be%2Fsockeye-salmon_thumb.jpg%3Fw%3D1200&f=1&nofb=1&ipt=fdc52300f2a486e548878753b61641dc2bec2586c5ddc63b86570ae7849b19de&ipo=images"
+        },
+        {
+            "name": "Black Bear",
+            "autotroph": false,
+            "category": "Aquatic eater thing",
+            "description": "Dumb bear I.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.theanimalspot.com%2Fwp-content%2Fuploads%2F2019%2F01%2Famericanblackbearsmall.jpg&f=1&nofb=1&ipt=9e1d8d40bed36ec7cf0d0ae4e68e80de78d678466eeed31189dded262adf07f9&ipo=images"
+        },
+        {
+            "name": "Brown Bear",
+            "autotroph": false,
+            "category": "Aquatic eater thing",
+            "description": "Dumb bear II.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F3.bp.blogspot.com%2F-ykmnv7qldfo%2FVu8Pr_70RNI%2FAAAAAAAAC_M%2FY8JoyPrlmdkDYI-yNDux1FwVXaq6WhDpwCPcB%2Fs1600%2FEuropean_Brown_Bear.jpg&f=1&nofb=1&ipt=2878425ad6557edf93dc984ec6a6fef7c1d40e353b1227549d97c8f2e0935f53&ipo=images"
+        },
+        {
+            "name": "Dragonfly",
+            "autotroph": false,
+            "category": "thing",
+            "description": "Dumb bug.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbirdwatchinghq.com%2Fwp-content%2Fuploads%2F2023%2F07%2Fdragonflies-featured.jpg&f=1&nofb=1&ipt=8cc5c17322d0486b1d1c34fd4ce825548f59d32857d4950d2ed09aea6acdd8ae&ipo=images"
+        },
+        {
+            "name": "Butterfly",
+            "autotroph": false,
+            "category": "thing",
+            "description": "Dumb bug.",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.natgeofe.com%2Fn%2F7d780709-cb42-4b66-849d-77b8d9062c1b%2Fmonarch_butterfly_thumb.JPG%3Fw%3D1200&f=1&nofb=1&ipt=3eb46ca2f067796959f71ba4f789607d8ed7cc771942d8bba0d540666bdc2f1e&ipo=images"
+        },
+        {
+            "name": "Wildflower",
+            "autotroph": true,
+            "category": "thing",
+            "description": "Dumb thingeymabopper",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbirdwatchinghq.com%2Fwp-content%2Fuploads%2F2022%2F06%2Fpink-wildflowers-featured-scaled.jpg&f=1&nofb=1&ipt=42509617e3ff3b519acee2ae12d82f07e92b3103e0a07bef96c89031c2a7fd1e&ipo=images"
+        }
+        
+    ],
+    "relationships": [
+        { "feeding_animal": "Squirrel", "food_animal": "Oak Tree" },
+        { "feeding_animal": "Squirrel", "food_animal": "Berry Bush" },
+        { "feeding_animal": "Bark Beetle", "food_animal": "Spruce Tree" },
+        { "feeding_animal": "Weasel", "food_animal": "Rabbit" },
+        { "feeding_animal": "Rabbit", "food_animal": "Grass" },
+        { "feeding_animal": "Fox", "food_animal": "Rabbit" },
+        { "feeding_animal": "Fox", "food_animal": "Weasel" },
+        { "feeding_animal": "Wolf", "food_animal": "Deer" },
+        { "feeding_animal": "Eagle", "food_animal": "Rabbit" },
+        { "feeding_animal": "Eagle", "food_animal": "Hawk" },
+        { "feeding_animal": "Hawk", "food_animal": "Rabbit" },
+        { "feeding_animal": "Chickadee", "food_animal": "Bark Beetle" },
+        { "feeding_animal": "Hawk", "food_animal": "Chickadee" },
+        { "feeding_animal": "Deer", "food_animal": "Berry Bush" },
+        { "feeding_animal": "Deer", "food_animal": "Grass" },
+        { "feeding_animal": "Deer", "food_animal": "Oak Tree" },
+        { "feeding_animal": "Hawk", "food_animal": "Squirrel" },
+        { "feeding_animal": "Wolf", "food_animal": "Rabbit" },
+        { "feeding_animal": "Wolf", "food_animal": "Squirrel" },
+        { "feeding_animal": "Wolf", "food_animal": "Fox" },
+        { "feeding_animal": "Wolf", "food_animal": "Weasel" },
+        { "feeding_animal": "Hawk", "food_animal": "Spruce Tree" },
+        { "feeding_animal": "Chickadee", "food_animal": "Spruce Tree" },
+        { "feeding_animal": "Black Bear", "food_animal": "Berry Bush" },
+        { "feeding_animal": "Brown Bear", "food_animal": "Berry Bush" },
+        { "feeding_animal": "Brown Bear", "food_animal": "Black Bear" },
+        { "feeding_animal": "Brown Bear", "food_animal": "Salmon" },
+        { "feeding_animal": "Salmon", "food_animal": "Dragonfly" },
+        { "feeding_animal": "Butterfly", "food_animal": "Wildflower" },
+        { "feeding_animal": "Dragonfly", "food_animal": "Butterfly" },
+        { "feeding_animal": "Black Bear", "food_animal": "Salmon" },
+        { "feeding_animal": "Brown Bear", "food_animal": "Wolf" },
+        { "feeding_animal": "Chickadee", "food_animal": "Dragonfly" },
+        { "feeding_animal": "Chickadee", "food_animal": "Butterfly" },
+        { "feeding_animal": "Brown Bear", "food_animal": "Deer" },
+        { "feeding_animal": "Eagle", "food_animal": "Chickadee" }
+    ]
+}

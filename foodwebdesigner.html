@@ -1247,7 +1247,7 @@ domElements.feedingAnimal.value = relationship.feeding_animal;
       drawOrganisms(ctx, positions);
     }
     
-    // Calculate node positions for the visualization
+    // Calculate node positions with reduced intersections and vertical staggering
     function calculateNodePositions() {
       const canvas = domElements.canvas;
       const width = canvas.width - 2 * CANVAS_PADDING;
@@ -1300,19 +1300,155 @@ domElements.feedingAnimal.value = relationship.feeding_animal;
       // Calculate positions based on trophic levels
       const levelCount = Object.keys(trophicLevels).length;
       
+      // Create a network structure
+      const network = {
+        nodes: state.organisms.map(o => ({ id: o.id })),
+        edges: state.relationships.map(r => ({ source: r.food_animal, target: r.feeding_animal }))
+      };
+      
+      // Identify intra-level edges (feeding relationships within the same trophic level)
+      const intraLevelEdges = {};
+      
       Object.entries(trophicLevels).forEach(([level, organismIds]) => {
-        const levelY = CANVAS_PADDING + (height * parseInt(level)) / (levelCount > 1 ? levelCount - 1 : 1);
+        intraLevelEdges[level] = [];
         
-        organismIds.forEach((id, index) => {
-          const spacing = width / (organismIds.length > 1 ? organismIds.length : 2);
-          const x = CANVAS_PADDING + spacing * (index + 0.5);
-          const y = levelY;
-          
-          positions[id] = { x, y };
+        // Find all feeding relationships within this level
+        state.relationships.forEach(rel => {
+          if (organismIds.includes(rel.feeding_animal) && organismIds.includes(rel.food_animal)) {
+            intraLevelEdges[level].push({ 
+              source: rel.food_animal, 
+              target: rel.feeding_animal 
+            });
+          }
         });
       });
       
+      // First pass: Calculate base vertical positions based on trophic levels
+      Object.entries(trophicLevels).forEach(([level, organismIds]) => {
+        const levelY = CANVAS_PADDING + (height * parseInt(level)) / (levelCount > 1 ? levelCount - 1 : 1);
+        organismIds.forEach(id => {
+          const node = network.nodes.find(n => n.id === id);
+          if (node) {
+            node.baseY = levelY;
+            node.y = levelY; // Initial position
+          }
+        });
+      });
+      
+      // Second pass: Optimize horizontal positions within each level to minimize crossings
+      Object.entries(trophicLevels).forEach(([level, organismIds]) => {
+        if (organismIds.length <= 1) {
+          // If there's only one organism at this level, center it
+          const id = organismIds[0];
+          const node = network.nodes.find(n => n.id === id);
+          if (node) {
+            node.x = CANVAS_PADDING + width / 2;
+          }
+        } else {
+          // For multiple organisms, optimize positions
+          optimizePositions(network, organismIds, parseInt(level), trophicLevels, intraLevelEdges);
+        }
+      });
+      
+      // Convert network to positions
+      network.nodes.forEach(node => {
+        positions[node.id] = { x: node.x, y: node.y };
+      });
+      
       return positions;
+    }
+
+    // Optimize positions to minimize crossings and add vertical staggering
+    function optimizePositions(network, organismIds, level, trophicLevels, intraLevelEdges) {
+      const canvas = domElements.canvas;
+      const width = canvas.width - 2 * CANVAS_PADDING;
+      const spacing = width / (organismIds.length > 1 ? organismIds.length : 2);
+      
+      // Get relevant edges for this level
+      const levelEdges = intraLevelEdges[level] || [];
+      
+      // Calculate a "center of mass" for each node based on its connections
+      const nodes = network.nodes.filter(n => organismIds.includes(n.id));
+      const prevLevelIds = trophicLevels[level - 1] || [];
+      const nextLevelIds = trophicLevels[level + 1] || [];
+      
+      nodes.forEach(node => {
+        // Find connections to previous and next levels
+        const prevConnections = network.edges
+          .filter(e => e.target === node.id && prevLevelIds.includes(e.source))
+          .map(e => network.nodes.find(n => n.id === e.source));
+        
+        const nextConnections = network.edges
+          .filter(e => e.source === node.id && nextLevelIds.includes(e.target))
+          .map(e => network.nodes.find(n => n.id === e.target));
+        
+        // Calculate center of mass based on connections
+        node.centerOfMass = 0;
+        let totalWeight = 0;
+        
+        prevConnections.forEach(conn => {
+          if (conn && conn.x !== undefined) {
+            node.centerOfMass += conn.x * 2;  // More weight to previous level
+            totalWeight += 2;
+          }
+        });
+        
+        nextConnections.forEach(conn => {
+          if (conn && conn.x !== undefined) {
+            node.centerOfMass += conn.x;
+            totalWeight += 1;
+          }
+        });
+        
+        // If there are connections, calculate the weighted average
+        if (totalWeight > 0) {
+          node.centerOfMass /= totalWeight;
+        } else {
+          // If no connections, use a default value
+          node.centerOfMass = CANVAS_PADDING + width / 2;
+        }
+      });
+      
+      // Sort nodes by their center of mass
+      nodes.sort((a, b) => a.centerOfMass - b.centerOfMass);
+      
+      // Assign horizontal positions based on the sorted order
+      nodes.forEach((node, index) => {
+        node.x = CANVAS_PADDING + spacing * (index + 0.5);
+      });
+      
+      // Apply vertical staggering for nodes with intra-level relationships
+      const MAX_VERTICAL_OFFSET = NODE_RADIUS * 3; // Maximum vertical offset
+      
+      // Create a map of vertical offsets
+      const verticalOffsets = {};
+      nodes.forEach(node => {
+        verticalOffsets[node.id] = 0;
+      });
+      
+      // Process intra-level edges to determine vertical positioning
+      levelEdges.forEach(edge => {
+        const sourceNode = nodes.find(n => n.id === edge.source);
+        const targetNode = nodes.find(n => n.id === edge.target);
+        
+        if (sourceNode && targetNode) {
+          // Make sure prey is lower than predator
+          verticalOffsets[edge.source] -= MAX_VERTICAL_OFFSET * 0.5;
+          verticalOffsets[edge.target] += MAX_VERTICAL_OFFSET * 0.5;
+        }
+      });
+      
+      // Add some randomization to nodes without specific relationships
+      nodes.forEach(node => {
+        // If no specific offset was assigned and we have multiple nodes, add slight randomness
+        if (verticalOffsets[node.id] === 0 && nodes.length > 2) {
+          // Small random offset, normalized to -0.3 to 0.3 range of MAX_VERTICAL_OFFSET
+          verticalOffsets[node.id] = (Math.random() * 0.6 - 0.3) * MAX_VERTICAL_OFFSET;
+        }
+        
+        // Apply the vertical offset
+        node.y = node.baseY + verticalOffsets[node.id];
+      });
     }
     
     // Draw organisms
@@ -1474,6 +1610,119 @@ domElements.feedingAnimal.value = relationship.feeding_animal;
       jsonBinBox.style.bottom = '20px';
       jsonBinBox.style.right = '20px';
     });
+
+    // Add this function to calculate the optimal zoom level and center
+    function calculateViewParameters() {
+      if (!state.organisms || state.organisms.length === 0) {
+        return {
+          zoomLevel: 1,
+          centerX: domElements.canvas.width / 2,
+          centerY: domElements.canvas.height / 2
+        };
+      }
+
+      // Calculate the bounding box of all node positions
+      const positions = calculateNodePositions();
+      
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+      
+      // Find the extremes of all node positions
+      Object.values(positions).forEach(pos => {
+        minX = Math.min(minX, pos.x - NODE_RADIUS - 10);
+        maxX = Math.max(maxX, pos.x + NODE_RADIUS + 10);
+        minY = Math.min(minY, pos.y - NODE_RADIUS - 10);
+        maxY = Math.max(maxY, pos.y + NODE_RADIUS + 10);
+      });
+      
+      // Add padding for labels
+      minY -= 100;
+      maxY += 100;
+      minX -= 100;
+      minY += 100;
+      
+      // Calculate required dimensions
+      const contentWidth = maxX - minX;
+      const contentHeight = maxY - minY;
+      
+      // Calculate the center point
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      
+      // Calculate zoom level based on content size and canvas size
+      const horizontalZoom = (domElements.canvas.width - 2 * CANVAS_PADDING) / contentWidth;
+      const verticalZoom = (domElements.canvas.height - 2 * CANVAS_PADDING) / contentHeight;
+      
+      // Use the smaller zoom to ensure everything fits
+      let zoomLevel = Math.min(horizontalZoom, verticalZoom);
+      
+      // Limit zoom level to reasonable bounds
+      zoomLevel = Math.max(0.1, Math.min(zoomLevel, 2));
+      
+      return { zoomLevel, centerX, centerY };
+    }
+
+    // Modified draw function to apply zooming
+    function drawFoodWeb() {
+      const ctx = domElements.canvas.getContext('2d');
+      
+      // Clear the canvas
+      ctx.clearRect(0, 0, domElements.canvas.width, domElements.canvas.height);
+      
+      // Calculate view parameters
+      const { zoomLevel, centerX, centerY } = calculateViewParameters();
+      
+      // Calculate node positions
+      const positions = calculateNodePositions();
+      
+      // Apply transformation
+      ctx.save();
+      
+      // Move to center, apply zoom, then move back
+      ctx.translate(domElements.canvas.width / 2, domElements.canvas.height / 2);
+      ctx.scale(zoomLevel, zoomLevel);
+      ctx.translate(-centerX, -centerY);
+      
+      // Draw relationships with transformed coordinates
+      drawRelationships(ctx, positions);
+      
+      // Draw organisms with transformed coordinates
+      drawOrganisms(ctx, positions);
+      
+      // Restore the context
+      ctx.restore();
+    }
+
+    // Update the canvas size when the window is resized
+    function handleResize() {
+      const container = domElements.canvas.parentElement;
+      domElements.canvas.width = container.clientWidth;
+      domElements.canvas.height = container.clientHeight;
+      
+      // Redraw with new dimensions
+      drawFoodWeb();
+    }
+
+    // Initialize the canvas and add event listeners
+    function initializeCanvas() {
+      // Set initial canvas size
+      handleResize();
+      
+      // Add resize event listener
+      window.addEventListener('resize', handleResize);
+      
+      // Initial draw
+      drawFoodWeb();
+    }
+
+    // Call this function when updating the state
+    function updateFoodWeb(newState) {
+      // Update state
+      state = newState;
+      
+      // Redraw with new state
+      drawFoodWeb();
+    }
 
     // Initialize on load
     window.addEventListener('DOMContentLoaded', init);

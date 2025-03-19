@@ -509,26 +509,52 @@
         let simulation = null;
         let g = null;
 
-        // Update the loadData function to get filename from URL parameter
         async function loadData() {
             try {
                 // Get the 'data' parameter from the URL
                 const urlParams = new URLSearchParams(window.location.search);
                 const dataParam = urlParams.get('data');
                 
-                // Use the provided filename or fall back to a default
-                const filename = dataParam || 'D.json';
-                console.log('Loading data from:', filename);
+                if (!dataParam) {
+                    // Fall back to default if no parameter is provided
+                    const filename = 'homeWeb.json';
+                    console.log('Loading default data from:', filename);
+                    const response = await fetch(filename);
+                    const jsonData = await response.json();
+                    return jsonData;
+                }
                 
-                // Fetch the JSON file
-                const response = await fetch(filename);
-                const jsonData = await response.json();
-                data = jsonData;
-                console.log('Data loaded:', data);
-                return data;
+                // Check if the parameter is a URL function call: url("http://example.com/data.json")
+                const urlMatch = dataParam.match(/url\(["'](.+)["']\)/i);
+                if (urlMatch && urlMatch[1]) {
+                    // Extract the actual URL from the match
+                    const externalUrl = urlMatch[1];
+                    console.log('Loading data from external URL:', externalUrl);
+                    
+                    try {
+                        // Fetch from the external URL
+                        const response = await fetch(externalUrl);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        const jsonData = await response.json();
+                        return jsonData;
+                    } catch (urlError) {
+                        console.error('Error loading from URL:', urlError);
+                        alert(`Failed to load data from URL: ${urlError.message}`);
+                        return null;
+                    }
+                } else {
+                    // Treat as a local file
+                    console.log('Loading data from local file:', dataParam);
+                    const response = await fetch(dataParam);
+                    const jsonData = await response.json();
+                    return jsonData;
+                }
             } catch (error) {
                 console.error('Error loading JSON:', error);
                 alert('Failed to load data file. Please check if the file exists and is valid JSON.');
+                return null;
             }
         }
 
@@ -865,6 +891,60 @@
             titleElement.textContent = data.ecosystem; // Set text to ecosystem name
             document.body.appendChild(titleElement);
         }
+
+        // Modify the file-loader HTML structure to include the URL input option
+        document.getElementById("file-loader").innerHTML = `
+            <select id="file-input" class="file-dropdown">
+                <option value="">Select a file...</option>
+                <option value="BorealForest.json">Boreal Forest</option>
+                <option value="Desert.json">Desert</option>
+                <option value="custom-url">Enter URL to data...</option>
+            </select>
+            <input id="url-input" type="text" placeholder="Paste URL here" style="display: none; width: 220px; padding: 8px; border-radius: 4px; border: none; margin-right: 8px;">
+            <button id="load-button">Go</button>
+        `;
+
+        // Add event listener to handle dropdown change
+        document.getElementById("file-input").addEventListener("change", function() {
+            const urlInput = document.getElementById("url-input");
+            if (this.value === "custom-url") {
+                urlInput.style.display = "inline-block";
+                urlInput.focus();
+            } else {
+                urlInput.style.display = "none";
+            }
+        });
+
+        // Modify the load button functionality to handle the URL input
+        document.getElementById("load-button").addEventListener("click", () => {
+            const dropdown = document.getElementById("file-input");
+            const selectedValue = dropdown.value;
+            
+            if (!selectedValue) {
+                alert("Please select a JSON file or enter a URL");
+                return;
+            }
+            
+            // Create the new URL with the data parameter
+            const currentUrl = new URL(window.location.href);
+            
+            if (selectedValue === "custom-url") {
+                const urlInput = document.getElementById("url-input").value.trim();
+                if (!urlInput) {
+                    alert("Please enter a valid URL");
+                    return;
+                }
+                
+                // Format as url("the-url-here")
+                currentUrl.searchParams.set('data', `url("${urlInput}")`);
+            } else {
+                // Regular file selection
+                currentUrl.searchParams.set('data', selectedValue);
+            }
+            
+            // Reload the page with the new URL
+            window.location.href = currentUrl.toString();
+        });
 
         // Define trophic levels and colors
         const trophicLevels = {

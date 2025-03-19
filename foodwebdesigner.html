@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Web Builder</title>
+  <style>
+    :root {
+      --primary: #3498db;
+      --secondary: #2ecc71;
+      --danger: #e74c3c;
+      --dark: #34495e;
+      --light: #ecf0f1;
+      --gray: #95a5a6;
+      --border-radius: 4px;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+      color: var(--dark);
+      line-height: 1.5;
+    }
+    
+    h1, h2, h3 {
+      margin-bottom: 15px;
+      color: var(--dark);
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .panel {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .web-container {
+      position: relative;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      overflow: hidden;
+      min-height: 600px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    input[type="text"], 
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--gray);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+    }
+    
+    .btn {
+      padding: 8px 15px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    
+    .btn:hover {
+      opacity: 0.9;
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    .btn-success {
+      background-color: var(--secondary);
+    }
+    
+    .btn-danger {
+      background-color: var(--danger);
+    }
+    
+    .organism-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+    
+    .relationship-list {
+      max-height: 250px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+    
+    .organism-item, .relationship-item {
+      padding: 10px;
+      border: 1px solid var(--light);
+      border-radius: var(--border-radius);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .organism-item {
+      display: grid;
+      grid-template-columns: auto 30px 30px;
+      gap: 5px;
+    }
+    
+    .organism-item img {
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .organism-item .item-content {
+      display: flex;
+      align-items: center;
+    }
+    
+    .organism-icon {
+      color: var(--secondary);
+      margin-right: 5px;
+    }
+    
+    .relationship-item {
+      position: relative;
+    }
+    
+    .relationship-arrow {
+      margin: 0 8px;
+      color: var(--gray);
+    }
+    
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 5px;
+      transition: color 0.2s;
+    }
+    
+    .edit-btn {
+      color: var(--primary);
+    }
+    
+    .delete-btn {
+      color: var(--danger);
+    }
+    
+    .action-btn:hover {
+      opacity: 0.8;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .close-btn {
+      color: var(--gray);
+      float: right;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close-btn:hover {
+      color: var(--dark);
+    }
+    
+    .modal-title {
+      margin-top: 0;
+    }
+    
+    .modal-footer {
+      margin-top: 20px;
+      text-align: right;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+    
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+    
+    .ecosystem-title {
+      margin-bottom: 5px;
+    }
+    
+    canvas {
+      display: block;
+    }
+    
+    .view-container {
+      position: relative;
+    }
+    
+    .export-container {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    .legend {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: var(--border-radius);
+      font-size: 12px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    
+    .producer {
+      background-color: var(--secondary);
+    }
+    
+    .consumer {
+      background-color: var(--primary);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .image-preview {
+      width: 100%;
+      height: 80px;
+      border: 1px dashed var(--gray);
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .image-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="panel">
+        <h2>Ecosystem</h2>
+        <div class="form-group">
+          <label for="ecosystem-name">Ecosystem Name</label>
+          <input type="text" id="ecosystem-name" placeholder="e.g. Boreal Forest">
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h2>Organisms</h2>
+        <div class="organism-list" id="organism-list">
+          <!-- Organisms will be rendered here -->
+        </div>
+        <button id="add-organism-btn" class="btn btn-success btn-block">Add Organism</button>
+      </div>
+      
+      <div class="panel">
+        <h2>Feeding Relationships</h2>
+        <div class="relationship-list" id="relationship-list">
+          <!-- Relationships will be rendered here -->
+        </div>
+        <button id="add-relationship-btn" class="btn btn-success btn-block">Add Relationship</button>
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="web-container">
+        <canvas id="food-web-canvas"></canvas>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-color producer"></div>
+            <span>Producer (Autotroph)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color consumer"></div>
+            <span>Consumer (Heterotroph)</span>
+          </div>
+        </div>
+        <div class="export-container">
+          <button id="export-btn" class="btn btn-primary">Export Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Organism Modal -->
+  <div id="organism-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-organism-modal">&times;</span>
+      <h3 class="modal-title" id="organism-modal-title">Add Organism</h3>
+      <form id="organism-form">
+        <input type="hidden" id="organism-id">
+        <div class="form-group">
+          <label for="organism-name">Name</label>
+          <input type="text" id="organism-name" required placeholder="e.g. Oak Tree">
+        </div>
+        <div class="form-group">
+          <label for="organism-category">Category</label>
+          <select id="organism-category" required>
+            <option value="Plant">Plant</option>
+            <option value="Herbivore">Herbivore</option>
+            <option value="Carnivore">Carnivore</option>
+            <option value="Omnivore">Omnivore</option>
+            <option value="Decomposer">Decomposer</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="organism-autotroph">
+          <label for="organism-autotroph">Autotroph (Producer)</label>
+        </div>
+        <div class="form-group">
+          <label for="organism-description">Description</label>
+          <textarea id="organism-description" rows="3" placeholder="Brief description of the organism"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="organism-image">Image URL</label>
+          <input type="text" id="organism-image" placeholder="https://example.com/image.jpg">
+          <div class="image-preview" id="image-preview">
+            <span id="preview-placeholder">Image preview</span>
+            <img id="preview-image" class="hidden" alt="Preview">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Save Organism</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Relationship Modal -->
+  <div id="relationship-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-relationship-modal">&times;</span>
+      <h3 class="modal-title" id="relationship-modal-title">Add Feeding Relationship</h3>
+      <form id="relationship-form">
+        <input type="hidden" id="relationship-id">
+        <div class="form-group">
+          <label for="feeding-animal">Feeding Animal (Consumer)</label>
+          <select id="feeding-animal" required>
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="food-animal">Food Source (Producer/Prey)</label>
+          <select id="food-animal" required>
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Save Relationship</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div id="export-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-export-modal">&times;</span>
+      <h3 class="modal-title">Export Food Web Data</h3>
+      <div class="form-group">
+        <label for="export-data">JSON Data</label>
+        <textarea id="export-data" rows="12" readonly></textarea>
+      </div>
+      <div class="modal-footer">
+        <button id="copy-data-btn" class="btn btn-primary">Copy to Clipboard</button>
+        <button id="download-data-btn" class="btn btn-success">Download as JSON</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Main application state
+    const state = {
+      ecosystem: "My Ecosystem",
+      organisms: [],
+      relationships: [],
+      editingOrganism: null,
+      editingRelationship: null,
+      nextOrganismId: 1
+    };
+    
+    // DOM Elements
+    const domElements = {
+      organismList: document.getElementById('organism-list'),
+      relationshipList: document.getElementById('relationship-list'),
+      addOrganismBtn: document.getElementById('add-organism-btn'),
+      addRelationshipBtn: document.getElementById('add-relationship-btn'),
+      exportBtn: document.getElementById('export-btn'),
+      ecosystemName: document.getElementById('ecosystem-name'),
+      
+      // Organism Modal
+      organismModal: document.getElementById('organism-modal'),
+      closeOrganismModal: document.getElementById('close-organism-modal'),
+      organismForm: document.getElementById('organism-form'),
+      organismModalTitle: document.getElementById('organism-modal-title'),
+      organismId: document.getElementById('organism-id'),
+      organismName: document.getElementById('organism-name'),
+      organismCategory: document.getElementById('organism-category'),
+      organismAutotroph: document.getElementById('organism-autotroph'),
+      organismDescription: document.getElementById('organism-description'),
+      organismImage: document.getElementById('organism-image'),
+      imagePreview: document.getElementById('image-preview'),
+      previewImage: document.getElementById('preview-image'),
+      previewPlaceholder: document.getElementById('preview-placeholder'),
+      
+      // Relationship Modal
+      relationshipModal: document.getElementById('relationship-modal'),
+      closeRelationshipModal: document.getElementById('close-relationship-modal'),
+      relationshipForm: document.getElementById('relationship-form'),
+      relationshipModalTitle: document.getElementById('relationship-modal-title'),
+      relationshipId: document.getElementById('relationship-id'),
+      feedingAnimal: document.getElementById('feeding-animal'),
+      foodAnimal: document.getElementById('food-animal'),
+      
+      // Export Modal
+      exportModal: document.getElementById('export-modal'),
+      closeExportModal: document.getElementById('close-export-modal'),
+      exportData: document.getElementById('export-data'),
+      copyDataBtn: document.getElementById('copy-data-btn'),
+      downloadDataBtn: document.getElementById('download-data-btn'),
+      
+      // Canvas
+      canvas: document.getElementById('food-web-canvas')
+    };
+    
+    // Constants
+    const CANVAS_PADDING = 50;
+    const NODE_RADIUS = 30;
+    const ARROW_SIZE = 10;
+    
+    // Initialize the application
+    function init() {
+      // Set up event listeners
+      setupEventListeners();
+      
+      // Load sample data if desired
+      loadSampleData();
+      
+      // Initial render
+      renderOrganismList();
+      renderRelationshipList();
+      
+      // Set up canvas
+      resizeCanvas();
+      renderFoodWeb();
+      
+      // Set ecosystem name
+      domElements.ecosystemName.value = state.ecosystem;
+    }
+    
+    // Set up event listeners
+    function setupEventListeners() {
+      // Organism events
+      domElements.addOrganismBtn.addEventListener('click', openAddOrganismModal);
+      domElements.closeOrganismModal.addEventListener('click', closeOrganismModal);
+      domElements.organismForm.addEventListener('submit', saveOrganism);
+      
+      // Relationship events
+      domElements.addRelationshipBtn.addEventListener('click', openAddRelationshipModal);
+      domElements.closeRelationshipModal.addEventListener('click', closeRelationshipModal);
+      domElements.relationshipForm.addEventListener('submit', saveRelationship);
+      
+      // Export events
+      domElements.exportBtn.addEventListener('click', openExportModal);
+      domElements.closeExportModal.addEventListener('click', closeExportModal);
+      domElements.copyDataBtn.addEventListener('click', copyExportData);
+      domElements.downloadDataBtn.addEventListener('click', downloadExportData);
+      
+      // Image preview
+      domElements.organismImage.addEventListener('input', updateImagePreview);
+      
+      // Ecosystem name
+      domElements.ecosystemName.addEventListener('change', updateEcosystemName);
+      
+      // Window resize for canvas
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        renderFoodWeb();
+      });
+    }
+    
+    // Load sample data
+    function loadSampleData() {
+      state.ecosystem = "Boreal Forest";
+      
+      state.organisms = [
+        {
+          id: 1,
+          name: "Oak Tree",
+          autotroph: true,
+          category: "Plant",
+          description: "A large tree that produces acorns.",
+          image_url: "https://treesourlifeline.weebly.com/uploads/1/4/3/9/143936547/shrubs-bushes-hd7092-64-1000_orig.jpg"
+        },
+        {
+          id: 2,
+          name: "Squirrel",
+          autotroph: false,
+          category: "Herbivore",
+          description: "A small rodent that feeds on acorns.",
+          image_url: "https://onlinetools.com/images/examples-onlineimagetools/squirrel-eating-nut.webp"
+        },
+        {
+          id: 3,
+          name: "Fox",
+          autotroph: false,
+          category: "Carnivore",
+          description: "A carnivore that hunts squirrels and rabbits.",
+          image_url: "https://i0.wp.com/www.roeselienraimond.com/wp-content/uploads/2016/07/fantastic_mr_fox.jpg"
+        },
+        {
+          id: 4,
+          name: "Wolf",
+          autotroph: false,
+          category: "Carnivore",
+          description: "A large predator that hunts foxes, hawks, and rabbits.",
+          image_url: "https://i.pinimg.com/originals/15/3a/1a/153a1aa9350e2a7d0a657c59173ec73a.jpg"
+        }
+      ];
+      
+      state.relationships = [
+        { id: 1, feeding_animal: 2, food_animal: 1 },
+        { id: 2, feeding_animal: 3, food_animal: 2 },
+        { id: 3, feeding_animal: 4, food_animal: 3 }
+      ];
+      
+      state.nextOrganismId = 5;
+    }
+    
+    // Render the organism list
+    function renderOrganismList() {
+      domElements.organismList.innerHTML = '';
+      
+      if (state.organisms.length === 0) {
+        domElements.organismList.innerHTML = '<p>No organisms added yet.</p>';
+        return;
+      }
+      
+      state.organisms.forEach(organism => {
+        const item = document.createElement('div');
+        item.className = 'organism-item';
+        
+        const content = document.createElement('div');
+        content.className = 'item-content';
+        
+        // Image thumbnail
+        if (organism.image_url) {
+          const img = document.createElement('img');
+          img.src = organism.image_url;
+          img.alt = organism.name;
+          img.onerror = function() {
+            this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktcXVlc3Rpb24tY2lyY2xlIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik04IDE1QTcgNyAwIDEgMSA4IDFhNyA3IDAgMCAxIDAgMTR6bTAgMUE4IDggMCAxIDAgOCAwYTggOCAwIDAgMCAwIDE2eiIvPgogIDxwYXRoIGQ9Ik01LjI1NSA1Ljc4NmEuMjM3LjIzNyAwIDAgMCAuMjQxLjI0N2guODI1Yy4xMzggMCAuMjQ4LS4xMTMuMjY2LS4yNS4wOS0uNjU2LjU0LTEuMTM0IDEuMzQyLTEuMTM0LjY4NiAwIDEuMzE0LjM0MyAxLjMxNCAxLjE2OCAwIC42MzUtLjM3NC45MjctLjk2NSAxLjM3MS0uNjczLjQ4OS0xLjIwNiAxLjA2LTEuMTY4IDEuOTg3bC4wMDMuMjE3YS4yNS4yNSAwIDAgMCAuMjUuMjQ2aC44MTFhLjI1LjI1IDAgMCAwIC4yNS0uMjV2LS4xMDVjMC0uNzE4LjI3My0uOTI3IDEuMDEtMS40ODYuNjA5LS40NjMgMS4yNDQtLjk3NyAxLjI0NC0yLjA1NiAwLTEuNTExLTEuMjc2LTIuMjQxLTIuNjczLTIuMjQxLTEuMjY3IDAtMi42NTUuNTktMi43NSAyLjI4NnptMS41NTcgNS43NjNjMCAuNTMzLjQyNS45MjcgMS4wMS45MjcuNjA5IDAgMS4wMjgtLjM5NCAxLjAyOC0uOTI3IDAtLjU1Mi0uNDItLjk0LTEuMDI5LS45NC0uNTg0IDAtMS4wMDkuMzg4LTEuMDA5Ljk0eiIvPgo8L3N2Zz4=';
+          };
+          content.appendChild(img);
+        }
+        
+        // Name and type indicator
+        const name = document.createElement('span');
+        name.textContent = organism.name;
+        content.appendChild(name);
+        
+        item.appendChild(content);
+        
+        // Edit button
+        const editBtn = document.createElement('button');
+        editBtn.className = 'action-btn edit-btn';
+        editBtn.innerHTML = '✏️';
+        editBtn.title = 'Edit';
+        editBtn.addEventListener('click', () => openEditOrganismModal(organism.id));
+        item.appendChild(editBtn);
+        
+        // Delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'action-btn delete-btn';
+        deleteBtn.innerHTML = '🗑️';
+        deleteBtn.title = 'Delete';
+        deleteBtn.addEventListener('click', () => deleteOrganism(organism.id));
+        item.appendChild(deleteBtn);
+        
+        domElements.organismList.appendChild(item);
+      });
+    }
+    
+    // Render the relationship list
+    function renderRelationshipList() {
+      domElements.relationshipList.innerHTML = '';
+      
+      if (state.relationships.length === 0) {
+        domElements.relationshipList.innerHTML = '<p>No relationships added yet.</p>';
+        return;
+      }
+      
+      state.relationships.forEach(relationship => {
+        const consumer = getOrganismById(relationship.feeding_animal);
+        const food = getOrganismById(relationship.food_animal);
+        
+        if (!consumer || !food) return;
+        
+        const item = document.createElement('div');
+        item.className = 'relationship-item';
+        
+        const content = document.createElement('div');
+        content.innerHTML = `
+          <strong>${consumer.name}</strong>
+          <span class="relationship-arrow">→</span>
+          <strong>${food.name}</strong>
+        `;
+        item.appendChild(content);
+        
+        const actions = document.createElement('div');
+        
+        // Edit button
+        const editBtn = document.createElement('button');
+        editBtn.className = 'action-btn edit-btn';
+        editBtn.innerHTML = '✏️';
+        editBtn.title = 'Edit';
+        editBtn.addEventListener('click', () => openEditRelationshipModal(relationship.id));
+        actions.appendChild(editBtn);
+        
+        // Delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'action-btn delete-btn';
+        deleteBtn.innerHTML = '🗑️';
+        deleteBtn.title = 'Delete';
+        deleteBtn.addEventListener('click', () => deleteRelationship(relationship.id));
+        actions.appendChild(deleteBtn);
+        
+        item.appendChild(actions);
+        
+        domElements.relationshipList.appendChild(item);
+      });
+    }
+    
+    // Open the add organism modal
+    function openAddOrganismModal() {
+      domElements.organismModalTitle.textContent = 'Add Organism';
+      domElements.organismId.value = '';
+      domElements.organismName.value = '';
+      domElements.organismCategory.value = 'Plant';
+      domElements.organismAutotroph.checked = false;
+      domElements.organismDescription.value = '';
+      domElements.organismImage.value = '';
+      
+      // Reset preview
+      domElements.previewImage.classList.add('hidden');
+      domElements.previewPlaceholder.classList.remove('hidden');
+      
+      domElements.organismModal.style.display = 'block';
+    }
+    
+    // Open the edit organism modal
+    function openEditOrganismModal(id) {
+      const organism = getOrganismById(id);
+      if (!organism) return;
+      
+      domElements.organismModalTitle.textContent = 'Edit Organism';
+      domElements.organismId.value = organism.id;
+      domElements.organismName.value = organism.name;
+      domElements.organismCategory.value = organism.category;
+      domElements.organismAutotroph.checked = organism.autotroph;
+      domElements.organismDescription.value = organism.description || '';
+      domElements.organismImage.value = organism.image_url || '';
+      
+      // Update preview
+      updateImagePreview();
+      
+      domElements.organismModal.style.display = 'block';
+    }
+    
+    // Close the organism modal
+    function closeOrganismModal() {
+      domElements.organismModal.style.display = 'none';
+    }
+    
+    // Save the organism
+    function saveOrganism(event) {
+      event.preventDefault();
+      
+      const id = domElements.organismId.value ? parseInt(domElements.organismId.value) : state.nextOrganismId++;
+      const name = domElements.organismName.value;
+      const category = domElements.organismCategory.value;
+      const autotroph = domElements.organismAutotroph.checked;
+      const description = domElements.organismDescription.value;
+      const image_url = domElements.organismImage.value;
+      
+      const organism = {
+        id,
+        name,
+        autotroph,
+        category,
+        description,
+        image_url
+      };
+      
+      if (domElements.organismId.value) {
+        // Update existing organism
+        const index = state.organisms.findIndex(o => o.id === parseInt(id));
+        if (index !== -1) {
+          state.organisms[index] = organism;
+        }
+      } else {
+        // Add new organism
+        state.organisms.push(organism);
+      }
+      
+      // Re-render UI
+      renderOrganismList();
+      renderRelationshipList();
+      renderFoodWeb();
+      
+      // Close modal
+      closeOrganismModal();
+    }
+    
+    // Delete an organism
+    function deleteOrganism(id) {
+      if (!confirm('Are you sure you want to delete this organism? This will also delete any relationships involving it.')) {
+        return;
+      }
+      
+      // Remove the organism
+      state.organisms = state.organisms.filter(o => o.id !== id);
+      
+      // Remove any relationships involving the organism
+      state.relationships = state.relationships.filter(r => 
+        r.feeding_animal !== id && r.food_animal !== id
+      );
+      
+      // Re-render UI
+      renderOrganismList();
+      renderRelationshipList();
+      renderFoodWeb();
+    }
+    
+    // Open the add relationship modal
+    function openAddRelationshipModal() {
+      if (state.organisms.length < 2) {
+        alert('You need at least two organisms to create a relationship.');
+        return;
+      }
+      
+      domElements.relationshipModalTitle.textContent = 'Add Feeding Relationship';
+      domElements.relationshipId.value = '';
+      
+      // Populate organism dropdowns
+      populateOrganismDropdowns();
+      
+      domElements.relationshipModal.style.display = 'block';
+    }
+    
+    // Open the edit relationship modal
+    function openEditRelationshipModal(id) {
+      const relationship = getRelationshipById(id);
+      if (!relationship) return;
+      
+      domElements.relationshipModalTitle.textContent = 'Edit Feeding Relationship';
+      domElements.relationshipId.value = relationship.id;
+      
+      // Populate organism dropdowns
+      populateOrganismDropdowns();
+      
+// Set selected values
+domElements.feedingAnimal.value = relationship.feeding_animal;
+      domElements.foodAnimal.value = relationship.food_animal;
+      
+      domElements.relationshipModal.style.display = 'block';
+    }
+    
+    // Close the relationship modal
+    function closeRelationshipModal() {
+      domElements.relationshipModal.style.display = 'none';
+    }
+    
+    // Populate organism dropdowns
+    function populateOrganismDropdowns() {
+      // Clear existing options
+      domElements.feedingAnimal.innerHTML = '';
+      domElements.foodAnimal.innerHTML = '';
+      
+      // Add default option
+      const defaultOption1 = document.createElement('option');
+      defaultOption1.value = '';
+      defaultOption1.textContent = '-- Select Consumer --';
+      domElements.feedingAnimal.appendChild(defaultOption1);
+      
+      const defaultOption2 = document.createElement('option');
+      defaultOption2.value = '';
+      defaultOption2.textContent = '-- Select Producer/Prey --';
+      domElements.foodAnimal.appendChild(defaultOption2);
+      
+      // Add organism options
+      state.organisms.forEach(organism => {
+        const option1 = document.createElement('option');
+        option1.value = organism.id;
+        option1.textContent = organism.name;
+        domElements.feedingAnimal.appendChild(option1);
+        
+        const option2 = document.createElement('option');
+        option2.value = organism.id;
+        option2.textContent = organism.name;
+        domElements.foodAnimal.appendChild(option2);
+      });
+    }
+    
+    // Save the relationship
+    function saveRelationship(event) {
+      event.preventDefault();
+      
+      const id = domElements.relationshipId.value ? parseInt(domElements.relationshipId.value) : state.relationships.length + 1;
+      const feeding_animal = parseInt(domElements.feedingAnimal.value);
+      const food_animal = parseInt(domElements.foodAnimal.value);
+      
+      if (feeding_animal === food_animal) {
+        alert('An organism cannot eat itself.');
+        return;
+      }
+      
+      // Check for duplicate relationship
+      const existingRelationship = state.relationships.find(r => 
+        r.feeding_animal === feeding_animal && 
+        r.food_animal === food_animal &&
+        r.id !== id
+      );
+      
+      if (existingRelationship) {
+        alert('This feeding relationship already exists.');
+        return;
+      }
+      
+      // Check for circular relationships
+      if (wouldCreateCircle(feeding_animal, food_animal, id)) {
+        alert('This would create a circular food chain, which is not allowed.');
+        return;
+      }
+      
+      const relationship = {
+        id,
+        feeding_animal,
+        food_animal
+      };
+      
+      if (domElements.relationshipId.value) {
+        // Update existing relationship
+        const index = state.relationships.findIndex(r => r.id === parseInt(id));
+        if (index !== -1) {
+          state.relationships[index] = relationship;
+        }
+      } else {
+        // Add new relationship
+        state.relationships.push(relationship);
+      }
+      
+      // Re-render UI
+      renderRelationshipList();
+      renderFoodWeb();
+      
+      // Close modal
+      closeRelationshipModal();
+    }
+    
+    // Check if adding a relationship would create a circular food chain
+    function wouldCreateCircle(consumer, food, currentRelationshipId) {
+      // Create a copy of relationships excluding the current one being edited
+      const relationshipsCopy = state.relationships.filter(r => r.id !== currentRelationshipId);
+      
+      // Add the new relationship
+      relationshipsCopy.push({ feeding_animal: consumer, food_animal: food });
+      
+      // Create adjacency list representation of the food web
+      const graph = {};
+      state.organisms.forEach(organism => {
+        graph[organism.id] = [];
+      });
+      
+      relationshipsCopy.forEach(rel => {
+        graph[rel.feeding_animal].push(rel.food_animal);
+      });
+      
+      // DFS to detect cycles
+      const visited = {};
+      const recStack = {};
+      
+      function isCyclicUtil(node) {
+        if (!visited[node]) {
+          visited[node] = true;
+          recStack[node] = true;
+          
+          for (const neighbor of graph[node]) {
+            if (!visited[neighbor] && isCyclicUtil(neighbor)) {
+              return true;
+            } else if (recStack[neighbor]) {
+              return true;
+            }
+          }
+        }
+        recStack[node] = false;
+        return false;
+      }
+      
+      // Check for cycles from each organism
+      for (const organism of state.organisms) {
+        if (isCyclicUtil(organism.id)) {
+          return true;
+        }
+      }
+      
+      return false;
+    }
+    
+    // Delete a relationship
+    function deleteRelationship(id) {
+      if (!confirm('Are you sure you want to delete this relationship?')) {
+        return;
+      }
+      
+      // Remove the relationship
+      state.relationships = state.relationships.filter(r => r.id !== id);
+      
+      // Re-render UI
+      renderRelationshipList();
+      renderFoodWeb();
+    }
+    
+    // Open the export modal
+    function openExportModal() {
+      // Create the export data
+      const exportData = {
+        ecosystem: state.ecosystem,
+        organisms: state.organisms.map(({ id, ...rest }) => rest),
+        relationships: state.relationships.map(rel => {
+          const consumer = getOrganismById(rel.feeding_animal);
+          const food = getOrganismById(rel.food_animal);
+          return {
+            feeding_animal: consumer ? consumer.name : '',
+            food_animal: food ? food.name : ''
+          };
+        })
+      };
+      
+      domElements.exportData.value = JSON.stringify(exportData, null, 2);
+      
+      domElements.exportModal.style.display = 'block';
+    }
+    
+    // Close the export modal
+    function closeExportModal() {
+      domElements.exportModal.style.display = 'none';
+    }
+    
+    // Copy export data to clipboard
+    function copyExportData() {
+      domElements.exportData.select();
+      document.execCommand('copy');
+      alert('Data copied to clipboard!');
+    }
+    
+    // Download export data as JSON file
+    function downloadExportData() {
+      const data = domElements.exportData.value;
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${state.ecosystem.replace(/\s+/g, '-').toLowerCase()}-food-web.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    // Update image preview
+    function updateImagePreview() {
+      const imageUrl = domElements.organismImage.value;
+      
+      if (imageUrl) {
+        domElements.previewImage.src = imageUrl;
+        domElements.previewImage.onload = function() {
+          domElements.previewImage.classList.remove('hidden');
+          domElements.previewPlaceholder.classList.add('hidden');
+        };
+        domElements.previewImage.onerror = function() {
+          domElements.previewImage.classList.add('hidden');
+          domElements.previewPlaceholder.classList.remove('hidden');
+        };
+      } else {
+        domElements.previewImage.classList.add('hidden');
+        domElements.previewPlaceholder.classList.remove('hidden');
+      }
+    }
+    
+    // Update ecosystem name
+    function updateEcosystemName() {
+      state.ecosystem = domElements.ecosystemName.value;
+    }
+    
+    // Get organism by ID
+    function getOrganismById(id) {
+      return state.organisms.find(o => o.id === parseInt(id));
+    }
+    
+    // Get relationship by ID
+    function getRelationshipById(id) {
+      return state.relationships.find(r => r.id === parseInt(id));
+    }
+    
+    // Resize canvas
+    function resizeCanvas() {
+      const container = domElements.canvas.parentElement;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      
+      domElements.canvas.width = width;
+      domElements.canvas.height = height;
+    }
+    
+    // Render the food web visualization
+    function renderFoodWeb() {
+      const canvas = domElements.canvas;
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      if (state.organisms.length === 0) {
+        // Display message if no organisms
+        ctx.font = '18px Arial';
+        ctx.fillStyle = '#666';
+        ctx.textAlign = 'center';
+        ctx.fillText('Add organisms and relationships to visualize your food web', canvas.width / 2, canvas.height / 2);
+        return;
+      }
+      
+      // Calculate positions for organisms
+      const positions = calculateNodePositions();
+      
+      // Draw edges (relationships)
+      drawRelationships(ctx, positions);
+      
+      // Draw nodes (organisms)
+      drawOrganisms(ctx, positions);
+    }
+    
+    // Calculate node positions for the visualization
+    function calculateNodePositions() {
+      const canvas = domElements.canvas;
+      const width = canvas.width - 2 * CANVAS_PADDING;
+      const height = canvas.height - 2 * CANVAS_PADDING;
+      
+      const positions = {};
+      
+      // Group organisms by trophic level
+      const trophicLevels = {};
+      
+      // Start with producers (autotrophs) at level 0
+      trophicLevels[0] = state.organisms.filter(o => o.autotroph).map(o => o.id);
+      
+      // Continue with consumers
+      let currentLevel = 0;
+      let processedIds = new Set(trophicLevels[0]);
+      
+      while (processedIds.size < state.organisms.length) {
+        currentLevel++;
+        trophicLevels[currentLevel] = [];
+        
+        // Find organisms that directly consume organisms from the previous level
+        state.relationships.forEach(rel => {
+          if (processedIds.has(rel.food_animal) && !processedIds.has(rel.feeding_animal)) {
+            if (!trophicLevels[currentLevel].includes(rel.feeding_animal)) {
+              trophicLevels[currentLevel].push(rel.feeding_animal);
+              processedIds.add(rel.feeding_animal);
+            }
+          }
+        });
+        
+        // If no new organisms were added and we still have unprocessed organisms,
+        // add remaining organisms to this level
+        if (trophicLevels[currentLevel].length === 0 && processedIds.size < state.organisms.length) {
+          state.organisms.forEach(organism => {
+            if (!processedIds.has(organism.id)) {
+              trophicLevels[currentLevel].push(organism.id);
+              processedIds.add(organism.id);
+            }
+          });
+        }
+        
+        // Break if no new organisms were added
+        if (trophicLevels[currentLevel].length === 0) {
+          delete trophicLevels[currentLevel];
+          break;
+        }
+      }
+      
+      // Calculate positions based on trophic levels
+      const levelCount = Object.keys(trophicLevels).length;
+      
+      Object.entries(trophicLevels).forEach(([level, organismIds]) => {
+        const levelY = CANVAS_PADDING + (height * parseInt(level)) / (levelCount > 1 ? levelCount - 1 : 1);
+        
+        organismIds.forEach((id, index) => {
+          const spacing = width / (organismIds.length > 1 ? organismIds.length : 2);
+          const x = CANVAS_PADDING + spacing * (index + 0.5);
+          const y = levelY;
+          
+          positions[id] = { x, y };
+        });
+      });
+      
+      return positions;
+    }
+    
+    // Draw organisms
+    function drawOrganisms(ctx, positions) {
+      state.organisms.forEach(organism => {
+        const pos = positions[organism.id];
+        if (!pos) return;
+        
+        // Draw node
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, NODE_RADIUS, 0, 2 * Math.PI);
+        ctx.fillStyle = organism.autotroph ? '#2ecc71' : '#3498db';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#2c3e50';
+        ctx.stroke();
+        
+        // Load and draw image if available
+        if (organism.image_url) {
+          const img = new Image();
+          img.src = organism.image_url;
+          img.onload = function() {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, NODE_RADIUS - 3, 0, 2 * Math.PI);
+            ctx.clip();
+            ctx.drawImage(img, pos.x - NODE_RADIUS + 3, pos.y - NODE_RADIUS + 3, 
+                         (NODE_RADIUS - 3) * 2, (NODE_RADIUS - 3) * 2);
+            ctx.restore();
+          };
+        }
+        
+        // Draw organism name
+        ctx.font = 'bold 12px Arial';
+        ctx.fillStyle = '#2c3e50';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Draw name below node
+        ctx.fillText(organism.name, pos.x, pos.y + NODE_RADIUS + 15);
+      });
+    }
+    
+    // Draw relationships
+    function drawRelationships(ctx, positions) {
+      state.relationships.forEach(rel => {
+        const consumer = getOrganismById(rel.feeding_animal);
+        const food = getOrganismById(rel.food_animal);
+        
+        if (!consumer || !food) return;
+        
+        const startPos = positions[food.id];
+        const endPos = positions[consumer.id];
+        
+        if (!startPos || !endPos) return;
+        
+        // Calculate direction vector
+        const dx = endPos.x - startPos.x;
+        const dy = endPos.y - startPos.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        
+        // Skip if organisms are at the same position
+        if (length < 1) return;
+        
+        const unitX = dx / length;
+        const unitY = dy / length;
+        
+        // Calculate start and end points (edge of nodes)
+        const startX = startPos.x + unitX * NODE_RADIUS;
+        const startY = startPos.y + unitY * NODE_RADIUS;
+        const endX = endPos.x - unitX * NODE_RADIUS;
+        const endY = endPos.y - unitY * NODE_RADIUS;
+        
+        // Draw arrow
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = '#7f8c8d';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Draw arrowhead
+        const angle = Math.atan2(dy, dx);
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(
+          endX - ARROW_SIZE * Math.cos(angle - Math.PI / 6),
+          endY - ARROW_SIZE * Math.sin(angle - Math.PI / 6)
+        );
+        ctx.lineTo(
+          endX - ARROW_SIZE * Math.cos(angle + Math.PI / 6),
+          endY - ARROW_SIZE * Math.sin(angle + Math.PI / 6)
+        );
+        ctx.closePath();
+        ctx.fillStyle = '#7f8c8d';
+        ctx.fill();
+      });
+    }
+    
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

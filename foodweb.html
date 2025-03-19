@@ -393,6 +393,27 @@
         #load-button:hover {
             background-color: #45a049;
         }
+
+        #file-input.file-dropdown {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+            margin-right: 8px;
+            width: 180px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #file-input.file-dropdown:focus {
+            outline: 2px solid #4CAF50;
+        }
+
+        #file-input.file-dropdown option {
+            background-color: white;
+            color: #333;
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
@@ -473,7 +494,11 @@
     </div>    
 
     <div id="file-loader">
-        <input type="text" id="file-input" placeholder="JSON filename">
+        <select id="file-input" class="file-dropdown">
+            <option value="">Select a file...</option>
+            <option value="BorealForest.json">Boreal Forest</option>
+            <option value="Desert.json">Desert</option>
+        </select>
         <button id="load-button">Go</button>
     </div>
 
@@ -692,21 +717,19 @@
 
         // File loader functionality
         document.getElementById("load-button").addEventListener("click", () => {
-            const filename = document.getElementById("file-input").value.trim();
+            const dropdown = document.getElementById("file-input");
+            const selectedFile = dropdown.value;
             
-            if (!filename) {
-                alert("Please enter a JSON filename");
+            if (!selectedFile) {
+                alert("Please select a JSON file");
                 return;
             }
-            
-            // Add .json extension if not present
-            const jsonFile = filename.endsWith('.json') ? filename : `${filename}.json`;
             
             // Create the new URL with the data parameter
             const currentUrl = new URL(window.location.href);
             
             // Update or add the data parameter
-            currentUrl.searchParams.set('data', jsonFile);
+            currentUrl.searchParams.set('data', selectedFile);
             
             // Reload the page with the new URL
             window.location.href = currentUrl.toString();

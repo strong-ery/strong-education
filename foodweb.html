@@ -538,6 +538,13 @@
                             throw new Error(`HTTP error! Status: ${response.status}`);
                         }
                         const jsonData = await response.json();
+                        
+                        // Check if this is a JSONbin.io response with a 'record' property
+                        if (jsonData.record) {
+                            console.log('JSONbin.io format detected, extracting record data');
+                            return jsonData.record;
+                        }
+                        
                         return jsonData;
                     } catch (urlError) {
                         console.error('Error loading from URL:', urlError);

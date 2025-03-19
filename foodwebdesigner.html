@@ -310,6 +310,100 @@
       max-height: 100%;
       object-fit: contain;
     }
+
+    .floating-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .floating-box.minimized {
+      transform: translateY(calc(100% - 40px));
+    }
+
+    .floating-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .floating-box-title {
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .instructions-section {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .bin-id-section {
+      margin-bottom: 15px;
+    }
+
+    .bin-id-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .bin-id-section input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .url-preview {
+      font-size: 13px;
+      color: #666;
+      word-break: break-all;
+      background-color: #f9f9f9;
+      padding: 8px;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+    .copy-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
+    .toggle-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -447,6 +541,39 @@
     </div>
   </div>
   
+  <div class="floating-box" id="jsonBinBox">
+    <div class="floating-box-header" id="boxHeader">
+      <div class="floating-box-title">JSONBin Exporter</div>
+      <button class="toggle-button" id="toggleButton">▼</button>
+    </div>
+    
+    <div class="box-content" id="boxContent">
+      <div class="instructions-section" id="instructions">
+        <ol>
+          <li>Visit <strong>jsonbin.io</strong> and create an account if needed</li>
+          <li>Go to <strong>Bins > Create a Bin</strong></li>
+          <li>Paste your JSON data (set to <strong>public</strong>)</li>
+          <li>Copy the Bin ID to use below</li>
+          <li>Use generated URL in Food Web Simulator's "Enter URL to data" option</li>
+        </ol>
+      </div>
+      
+      <div class="bin-id-section">
+        <label for="binIdInput">JSONBin ID:</label>
+        <input 
+          type="text" 
+          id="binIdInput" 
+          placeholder="Enter your JSONBin ID" 
+          oninput="updateUrlPreview()"
+        >
+        <div class="url-preview" id="urlPreview">
+          https://api.jsonbin.io/v3/b/<span id="previewBinId">YOUR_BIN_ID</span>/latest
+        </div>
+        <button class="copy-button" id="copyButton">Copy URL</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Main application state
     const state = {
@@ -1285,6 +1412,69 @@ domElements.feedingAnimal.value = relationship.feeding_animal;
       });
     }
     
+    // Toggle floating box
+    const jsonBinBox = document.getElementById('jsonBinBox');
+    const boxHeader = document.getElementById('boxHeader');
+    const boxContent = document.getElementById('boxContent');
+    const toggleButton = document.getElementById('toggleButton');
+    
+    boxHeader.addEventListener('click', () => {
+      jsonBinBox.classList.toggle('minimized');
+      toggleButton.textContent = jsonBinBox.classList.contains('minimized') ? '▲' : '▼';
+    });
+    
+    // Update URL preview
+    function updateUrlPreview() {
+      const binId = document.getElementById('binIdInput').value;
+      document.getElementById('previewBinId').textContent = binId || 'YOUR_BIN_ID';
+    }
+    
+    // Copy URL functionality
+    document.getElementById('copyButton').addEventListener('click', () => {
+      const binId = document.getElementById('binIdInput').value;
+      if (!binId) {
+        alert('Please enter a JSONBin ID first');
+        return;
+      }
+      
+      const url = `https://api.jsonbin.io/v3/b/${binId}/latest`;
+      navigator.clipboard.writeText(url).then(() => {
+        const copyButton = document.getElementById('copyButton');
+        copyButton.textContent = 'Copied!';
+        setTimeout(() => {
+          copyButton.textContent = 'Copy URL';
+        }, 2000);
+      });
+    });
+    
+    // Auto-repositioning functionality
+    let lastScrollY = window.scrollY;
+    
+    function checkPosition() {
+      const currentScrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const boxHeight = jsonBinBox.offsetHeight;
+      const boxBottom = parseInt(window.getComputedStyle(jsonBinBox).bottom);
+      
+      // If scrolling caused the box to potentially cover important content
+      if (Math.abs(currentScrollY - lastScrollY) > 50) {
+        // Move the box slightly to avoid covering content
+        const newBottom = Math.max(20, Math.min(viewportHeight * 0.2, boxBottom + 10));
+        jsonBinBox.style.bottom = `${newBottom}px`;
+        
+        lastScrollY = currentScrollY;
+      }
+    }
+    
+    // Check position on scroll
+    window.addEventListener('scroll', checkPosition, { passive: true });
+    
+    // Initial position setup
+    window.addEventListener('load', () => {
+      jsonBinBox.style.bottom = '20px';
+      jsonBinBox.style.right = '20px';
+    });
+
     // Initialize on load
     window.addEventListener('DOMContentLoaded', init);
   </script>

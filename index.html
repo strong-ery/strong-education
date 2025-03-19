@@ -3,1055 +3,692 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Web Maker</title>
+    <title>Home - Dylan Strong</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            background-color: #f5f5f5;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        #food-web {
-            width: 100vw;
-            height: 100vh;
-            background-color: #e8f5e9;
-            position: relative;
-            overflow: hidden;
-        }
-
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .node {
-            cursor: grab;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-        }
-
-        .node:hover {
-            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3));
-        }
-
-        .node:active {
-            cursor: grabbing;
-        }
-
-        .link {
-        stroke: #90a4ae;
-        stroke-opacity: 0.7;
-        stroke-width: 2px;
-        marker-start: url(#arrow);
-        stroke-dasharray: 5,5;
-        animation: dashAnimation 1s linear infinite;
-        }
-
-        @keyframes dashAnimation {
-        from {
-            stroke-dashoffset: 0;
-        }
-        to {
-            stroke-dashoffset: +30;
-        }
-        }
-
-        .node-label {
-            font-size: 14px;
-            text-anchor: middle;
-            font-weight: 500;
-            pointer-events: none;
-            fill: #263238;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .node-image {
-            clip-path: circle(25px at center);
-        }
-
-        #explodeButton {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(50, 50, 50, 0.8); /* Dark semi-transparent background */
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 8px 16px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            backdrop-filter: blur(5px);
-            z-index: 10;
-        }
-
-        #explodeButton:hover {
-            background: rgba(255, 0, 0, 0.8); /* Red tint on hover */
-            border-color: rgba(255, 255, 255, 0.8);
-            transform: translateX(-50%) scale(1.05);
-        }
-
-        #ecosystem-title {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-family: sans-serif;
-        }
-
-        .level-pyramids {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            display: flex;
-            width: 450px; /* Slightly smaller */
-            height: 200px;
-            justify-content: space-between;
-            z-index: 100;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .level-pyramids.hidden {
-            transform: translateX(-105%); /* Moves the container out of view */
-        }
-
-        #toggle-pyramid {
-            position: absolute;
-            left: 450px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-
-        #toggle-pyramid:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        .pyramid-title {
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            text-align: center;
-            color: #37474f;
-        }
-
-        .pyramid-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0 10px;
-        }
-
-        .pyramid {
-            width: 100%;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            position: relative;
-        }
-
-        .level {
-            height: 40px auto;
-            margin: 3px auto;
-            position: relative;
-            border-radius: 6px;
-            clip-path: polygon(5% 0, 95% 0, 100% 100%, 0% 100%);
-            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .level:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .level-text {
-            position: absolute;
-            text-align: center;
-            color: rgba(0, 0, 0, 0.7);
-            font-size: 90%;
-            font-weight: 700;
-            width: 100%;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            pointer-events: none;
-            z-index: 5;
-            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4);
-        }
-
-        .pyramid.energy .level {
-            background: linear-gradient(to bottom, #FF7043, #FF5722);
-            color: #333;
-            font-weight: 700;
-        }
-
-        .pyramid.mass .level {
-            background: linear-gradient(to bottom, #29B6F6, #03A9F4);
-            color: #333;
-            font-weight: 700;
-        }
-
-        .pyramid.population .level {
-            background: linear-gradient(to bottom, #FFEE58, #FFEB3B);
-            color: #333;
-            font-weight: 700;
-        }
-        .legend {
-            position: absolute;
-            top: 60px;
-            left: 10px;
-            font-size: 12px; /* Smaller font */
-            padding: 15px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-
-        .legend div {
-            margin: 8px 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .legend span {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            margin-right: 10px;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-        }
-
-        .organism-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .organism-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            margin-right: 8px;
-            border: 2px solid rgba(255,255,255,0.8);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        #reset-view {
-            width: 90px;
-            font-size: 14px;
-        }
-
-       .trophic-pyramid {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            z-index: 100;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .trophic-pyramid.hidden {
-            transform: translateX(105%); /* Moves the container out of view */
-        }
-
-        #toggle-trophic {
-            position: absolute;
-            right: 300px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-
-        #toggle-trophic:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        .trophic-pyramid-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-            color: #37474f;
-        }
-
-        .trophic-level-container {
-            display: flex;
-            flex-direction: column-reverse; /* Start from bottom (autotrophs) */
-            width: 100%;
-            height: auto;
-        }
-
-        .trophic-level {
-            margin: 3px 0;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            min-height: 70px;
-            position: relative;
-        }
-
-        .trophic-level-name {
-            position: absolute;
-            left: 10px;
-            top: 5px;
-            font-size: 10px;
-            font-weight: bold;
-            color: rgba(0, 0, 0, 0.7);
-        }
-
-        .organism-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            margin: 5px;
-            border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .organism-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
         
-        #file-loader {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 8px;
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        section {
+            min-height: 100vh;
             display: flex;
+            justify-content: center;
             align-items: center;
-            z-index: 1000;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
         }
-
-        #file-input {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 4px;
-            padding: 8px;
-            margin-right: 8px;
-            width: 180px;
-            font-size: 14px;
+        
+        .hero {
+            flex-direction: column;
+            text-align: center;
+            background: linear-gradient(135deg, #121212 0%, #2d2d2d 100%);
         }
-
-        #load-button {
-            background-color: #4CAF50;
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-family: "Heroking-Regular.ttf";
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s 0.3s forwards;
+        }
+        
+        .hero button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s 0.6s forwards;
+        }
+        
+        .hero button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .about {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+        
+        .about-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .about-text {
+            flex: 1;
+            padding: 2rem;
+            min-width: 300px;
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .about-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 300px;
+        }
+        
+        .about-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .skills {
+            background: linear-gradient(135deg, #1d1d1d 0%, #2d2d2d 100%);
+        }
+        
+        .skills-container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .skills-container h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ffffff;
+        }
+        
+        .skill-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        
+        .skill-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 250px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .skill-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .skill-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer {
+            background-color: #121212;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .copyright {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .license {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-indicator svg {
+            width: 40px;
+            height: 40px;
+            fill: rgba(255, 255, 255, 0.5);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s, transform 1s;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        #load-button:hover {
-            background-color: #45a049;
+        /* Projects Button */
+        .projects-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .projects-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 200;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Projects Window */
+        .projects-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 80%;
+            max-width: 1000px;
+            max-height: 80vh;
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            border-radius: 15px;
+            z-index: 300;
+            display: none;
+            opacity: 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .projects-window.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .projects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .projects-header h2 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-button:hover {
+            color: #ffffff;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(80vh - 80px);
+        }
+
+        /* Project Cards */
+        .project-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .project-card h3 {
+            font-size: 1.4rem;
+            margin: 0 0 15px 0;
+            color: #ffffff;
+        }
+
+        .project-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .project-tag {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .project-link {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .project-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Scrollbar Styling */
+        .projects-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .projects-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .projects-grid::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .projects-grid::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* For mobile responsiveness */
+        @media (max-width: 768px) {
+            .projects-button {
+                top: 20px;
+                left: 20px;
+                padding: 10px 18px;
+            }
+            
+            .projects-window {
+                width: 90%;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="food-web"></div>
+    <!-- Add this button to the body, right after the opening <body> tag -->
+    <div class="projects-button" id="projectsButton">
+        <span>Projects</span>
+    </div>
 
-    <div class="level-pyramids">
-        <div class="pyramid-container">
-            <div class="pyramid-title">Energy Pyramid</div>
-            <div class="pyramid energy">
-                <div class="level" style="width: 25%; height: 60%;">
-                    <div class="level-text" style="font-size: 6px;">Tertiary Consumers</div>
+    <!-- Add this projects window section -->
+    <div class="projects-window" id="projectsWindow">
+        <div class="projects-header">
+            <h2>My Projects</h2>
+            <button class="close-button" id="closeProjects">×</button>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-icon">🌐</div>
+                <h3>Food Web Simulator</h3>
+                <p>A dynamic simulation tool that models ecological relationships and food chain interactions in various ecosystems.</p>
+                <div class="project-links">
+                    <a href="foodweb.html" class="project-link">View Project</a>
                 </div>
-                <div class="level" style="width: 50%; height: 75%;">
-                    <div class="level-text" style="font-size: 8px;">Secondary Consumers</div>
+            </div>
+            <div class="project-card">
+                <div class="project-icon">🧬</div>
+                <h3>Food Web Designer (WIP)</h3>
+                <p>An interactive platform for designing custom food webs with real-time feedback and insights.</p>
+                <div class="project-tags">
+                    <span class="project-tag">Work in Progress</span>
                 </div>
-                <div class="level" style="width: 75%; height: 90%;">
-                    <div class="level-text" style="font-size: 10px;">Primary Consumers</div>
-                </div>
-                <div class="level" style="width: 100%; height: 100%;">
-                    <div class="level-text" style="font-size: 14px;">Producers</div>
+                <div class="project-links">
+                    <a href="#" class="project-link">Development Preview</a>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Add overlay for background dimming -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <h1>Dylan Strong</h1>
+        <p>Student • Developer • Innovator</p>
+        <button onclick="scrollToSection('#about')">Discover More</button>
+        
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 17.414L3.293 8.707l1.414-1.414L12 14.586l7.293-7.293 1.414 1.414z"/>
+            </svg>
+        </div>
+        
+        <canvas class="particles" id="particles"></canvas>
+    </section>
     
-        <div class="pyramid-container">
-            <div class="pyramid-title">Mass Pyramid</div>
-            <div class="pyramid mass">
-                <div class="level" style="width: 25%; height: 60%;">
-                    <div class="level-text" style="font-size: 6px;">Tertiary Consumers</div>
-                </div>
-                <div class="level" style="width: 50%; height: 75%;">
-                    <div class="level-text" style="font-size: 8px;">Secondary Consumers</div>
-                </div>
-                <div class="level" style="width: 75%; height: 90%;">
-                    <div class="level-text" style="font-size: 10px;">Primary Consumers</div>
-                </div>
-                <div class="level" style="width: 100%; height: 100%;">
-                    <div class="level-text" style="font-size: 14px;">Producers</div>
-                </div>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-container">
+            <div class="about-text reveal">
+                <h2>About Me</h2>
+                <p>Hello! I'm a selectively dedicated student with a passion for mechanics and computer science. I'm currently pursuing my High School Diploma at Prairie Winds Secondary School.
+                <p>My aspirations include achieving financial independence and developing a comprehensive understanding of this rock we call Earth. I excel in driving, programming, and constructive debate, and I actively seek opportunities to expand my knowledge and professional capabilities.</p>
+                <p>of academics, I dedicate time to automotive exploration and development of innovative projects. I firmly believe that with determination and effort, one can achieve their professional and personal goals.</p>
+            </div>
+            <div class="about-image reveal">
+                <img src="IMG_6147.jpg" alt="About Me Image">
             </div>
         </div>
+    </section>
     
-        <div class="pyramid-container">
-            <div class="pyramid-title">Population Pyramid</div>
-            <div class="pyramid population">
-                <div class="level" style="width: 25%; height: 60%;">
-                    <div class="level-text" style="font-size: 6px;">Tertiary Consumers</div>
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="skills-container">
+            <h2 class="reveal">My Skills</h2>
+            <div class="skill-items">
+                <div class="skill-item reveal">
+                    <div class="skill-icon">🎨</div>
+                    <h3>Creating</h3>
+                    <p>I've always had a natural talent to create, through many mediums. Music, 3D Modeling, Game Design, Drawing, you name it, I can learn it.</p>
                 </div>
-                <div class="level" style="width: 50%; height: 75%;">
-                    <div class="level-text" style="font-size: 8px;">Secondary Consumers</div>
+                <div class="skill-item reveal">
+                    <div class="skill-icon">💻</div>
+                    <h3>Computer Science</h3>
+                    <p>I can create computer programs, websites, games, and analyze data using my coding ability.</p>
                 </div>
-                <div class="level" style="width: 100%; height: 90%;">
-                    <div class="level-text" style="font-size: 9px;">Primary Consumers</div>
-                </div>
-                <div class="level" style="width: 75%; height: 100%;">
-                    <div class="level-text" style="font-size: 14px;">Producers</div>
+                <div class="skill-item reveal">
+                    <div class="skill-icon">🏎️</div>
+                    <h3>Driving</h3>
+                    <p>Whether working on, or driving, I love vehicles, and I am always trying to refine my skills with them.</p>
                 </div>
             </div>
-        </div>        
-    </div>
-
-    <!-- Add the new trophic level pyramid container -->
-    <div class="trophic-pyramid">
-        <div class="trophic-pyramid-title">Trophic Level Placement</div>
-        <div id="trophic-level-container" class="trophic-level-container">
-            <!-- Trophic levels will be added here dynamically -->
         </div>
-    </div>
-
-    <div class="legend">
-        <div><span style="background-color: #4CAF50;"></span> Autotroph</div>
-        <div><span style="background-color: #FF7043;"></span> Primary Consumer</div>
-        <div><span style="background-color: #FFEB3B;"></span> Secondary Consumer</div>
-        <div><span style="background-color: #5d22ff;"></span> Tertiary Consumer</div>
-        <div><span style="background-color: #ff00ff;"></span> Quaternary Consumer</div>
-        <div><span style="background-color: #888;"></span> Undefined Trophic Level (Higher Than Max)</div>
-    </div>    
-
-    <div id="file-loader">
-        <input type="text" id="file-input" placeholder="JSON filename">
-        <button id="load-button">Go</button>
-    </div>
-
-    <button id="explodeButton">Explode Arrange</button>
-
-    <script src="https://d3js.org/d3.v6.min.js"></script>
+    </section>
+    
+    <!-- Footer with Copyright and License -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="copyright">
+                © <span id="currentYear"></span> Dylan Strong. All Rights Reserved.
+            </div>
+            <div class="license">
+                Licensed under Apache-2.0 • [Additional License Information]
+            </div>
+        </div>
+    </footer>
+    
     <script>
-        let simulation = null;
-        let g = null;
-
-        // Update the loadData function to get filename from URL parameter
-        async function loadData() {
-            try {
-                // Get the 'data' parameter from the URL
-                const urlParams = new URLSearchParams(window.location.search);
-                const dataParam = urlParams.get('data');
-                
-                // Use the provided filename or fall back to a default
-                const filename = dataParam || 'D.json';
-                console.log('Loading data from:', filename);
-                
-                // Fetch the JSON file
-                const response = await fetch(filename);
-                const jsonData = await response.json();
-                data = jsonData;
-                console.log('Data loaded:', data);
-                return data;
-            } catch (error) {
-                console.error('Error loading JSON:', error);
-                alert('Failed to load data file. Please check if the file exists and is valid JSON.');
-            }
+        // Set current year for copyright
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Scroll to section
+        function scrollToSection(selector) {
+            const section = document.querySelector(selector);
+            section.scrollIntoView({ behavior: 'smooth' });
         }
-
-        // Initialize data as null
-        let data = null;
-
-        // Load data and then initialize everything that depends on it
-        async function initializeApp() {
-            // Load the data first
-            data = await loadData();
+        
+        // Reveal elements on scroll
+        window.addEventListener('scroll', revealOnScroll);
+        
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
             
-            // Only proceed when data is loaded
-            if (!data) {
-                console.error("Failed to load data");
-                return;
-            }
-            
-            // Now call the functions that depend on data
-            displayEcosystemTitle(data);
-            calculateTrophicLevels();
-            calculateEcosystemStats(data);
-
-            // Assign UUIDs to organisms
-            const organismsMap = new Map();
-            data.organisms.forEach(organism => {
-                organism.id = generateUUID();
-                organismsMap.set(organism.name, organism);
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
             });
-
-            // Define relationships based on the JSON
-            const relationships = data.relationships.map(relationship => ({
-                source: organismsMap.get(relationship.feeding_animal),
-                target: organismsMap.get(relationship.food_animal)
-            }));
-
-            // Force simulation setup
-            const simulation = d3.forceSimulation(data.organisms)
-                .force("link", d3.forceLink(relationships).id(d => d.id).distance(150))
-                .force("charge", d3.forceManyBody().strength(-300))
-                .force("center", d3.forceCenter(width / 2, height / 2))
-                .force("collision", d3.forceCollide().radius(50));
-
-            // Add links (feeding relationships)
-            const link = g.append("g")
-                .selectAll(".link")
-                .data(relationships)
-                .enter().append("line")
-                .attr("class", "link");
-
-            // Create groups for each organism
-            const nodeGroup = g.append("g")
-                .selectAll(".node-group")
-                .data(data.organisms)
-                .enter().append("g")
-                .attr("class", "node")
-                .call(d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended));
-
-            // Add images for each organism
-            const nodeImages = nodeGroup.append("image")
-                .attr("class", "node-image")
-                .attr("xlink:href", d => d.image_url)
-                .attr("width", 50)
-                .attr("height", 50)
-                .attr("x", -25)
-                .attr("y", -25)
-                .attr("clip-path", "circle(25px)");
-
-            // Add circular border around images with trophic level color
-            const nodeCircles = nodeGroup.append("circle")
-                .attr("r", 27)
-                .attr("fill", "none")
-                .attr("stroke", d => d.color)
-                .attr("stroke-width", 4)
-                .attr("opacity", 0.8);
-
-            // Add labels for nodes
-            const labels = nodeGroup.append("text")
-                .attr("class", "node-label")
-                .attr("dy", 40)
-                .text(d => d.name);
-
-            const multiDots = g.append("g")
-                .selectAll(".multi-trophic-dot")
-                .data(data.organisms)
-                .enter().append("g") // Create a group for each organism's dots
-                .attr("class", "multi-trophic-dot")
-                .each(function(d) {
-                    // For each trophic level, add a dot with fixed offsets
-                    d.trophicLevels.forEach((level, i) => {
-                        const offset = 15 * i; // Offset for each trophic level to avoid overlap
-                        let fillColor;
-                        switch(level) {
-                            case 0: 
-                                fillColor = trophicLevels.autotroph.color; 
-                                break;
-                            case 1: 
-                                fillColor = trophicLevels.primary.color; 
-                                break;
-                            case 2: 
-                                fillColor = trophicLevels.secondary.color; 
-                                break;
-                            case 3: 
-                                fillColor = trophicLevels.tertiary.color; 
-                                break;
-                            case 4: 
-                                fillColor = trophicLevels.quaternary.color; 
-                                break;
-                            default: 
-                                fillColor = "#888";
-                        }
-                        d3.select(this).append("circle")
-                            .attr("class", "organism-dot")
-                            .attr("r", 7)
-                            .attr("fill", fillColor)
-                            .attr("stroke", "#fff")
-                            .attr("stroke-width", 2)
-                            // Position relative to the group's origin (which is the organism's position)
-                            .attr("cx", 35)       // fixed offset from the group (e.g., to the right of the icon)
-                            .attr("cy", -10 - offset); // fixed vertical offset with extra spacing for multiple levels
-                    });
-                });
-
-                // In your simulation tick, ensure both the node icons and their trophic dots update together:
-                simulation.on("tick", () => {
-                    link
-                        .attr("x1", d => d.source.x)
-                        .attr("y1", d => d.source.y)
-                        .attr("x2", d => d.target.x)
-                        .attr("y2", d => d.target.y);
-
-                    // Update node icon positions
-                    nodeGroup
-                        .attr("transform", d => `translate(${d.x}, ${d.y})`);
-
-                    // Update multi-trophic dots positions (they will follow the node icon groups)
-                    multiDots
-                        .attr("transform", d => `translate(${d.x}, ${d.y})`);
-                });
-
-                // Dragging functions
-                function dragstarted(event, d) {
-                    if (!event.active) simulation.alphaTarget(0.3).restart();
-                    d.fx = d.x;
-                    d.fy = d.y;
-                }
-
-                function dragged(event, d) {
-                    d.fx = event.x;
-                    d.fy = event.y;
-                }
-
-                function dragended(event, d) {
-                    if (!event.active) simulation.alphaTarget(0);
-                    d.fx = null;
-                    d.fy = null;
-                }
-
-                document.getElementById("explodeButton").addEventListener("click", () => {
-                    const originalStrength = simulation.force("charge").strength(); // Save original charge strength
-
-                    // Temporarily increase the repulsive force
-                    simulation.force("charge").strength(-5000); 
-                    simulation.alpha(1).restart(); // Restart simulation to apply changes
-
-                    // Restore the original force after a short delay
-                    setTimeout(() => {
-                        simulation.force("charge").strength(originalStrength);
-                        simulation.alpha(1).restart();
-                    }, 1000); // Explosion lasts for 1 second
-                });
-
-                // Adjust SVG size on window resize
-                window.addEventListener("resize", () => {
-                    const width = window.innerWidth;
-                    const height = window.innerHeight;
-                    svg.attr("width", width).attr("height", height);
-                    simulation.force("center", d3.forceCenter(width / 2, height / 2));
-                    simulation.restart();
-                });
         }
-
-        initializeApp();
-
-        // File loader functionality
-        document.getElementById("load-button").addEventListener("click", () => {
-            const filename = document.getElementById("file-input").value.trim();
+        
+        // Initialize reveal on load
+        window.addEventListener('load', revealOnScroll);
+        
+        // Particles background
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('particles');
+            const ctx = canvas.getContext('2d');
             
-            if (!filename) {
-                alert("Please enter a JSON filename");
-                return;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 100;
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    color: `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.1})`,
+                    vx: Math.random() * 2 - 1,
+                    vy: Math.random() * 2 - 1
+                });
             }
             
-            // Add .json extension if not present
-            const jsonFile = filename.endsWith('.json') ? filename : `${filename}.json`;
-            
-            // Create the new URL with the data parameter
-            const currentUrl = new URL(window.location.href);
-            
-            // Update or add the data parameter
-            currentUrl.searchParams.set('data', jsonFile);
-            
-            // Reload the page with the new URL
-            window.location.href = currentUrl.toString();
-        });
-
-        // Add new code for the trophic level pyramid
-        document.addEventListener("DOMContentLoaded", function () {
-            // Set up the existing pyramid toggle
-            const pyramidContainer = document.querySelector(".level-pyramids");
-            const toggleButton = document.createElement("button");
-            toggleButton.id = "toggle-pyramid";
-            toggleButton.textContent = "▶";
-            pyramidContainer.appendChild(toggleButton);
-            let isPyramidVisible = true;
-            toggleButton.addEventListener("click", function () {
-                if (isPyramidVisible) {
-                    pyramidContainer.classList.add("hidden");
-                    toggleButton.textContent = "◀";
-                } else {
-                    pyramidContainer.classList.remove("hidden");
-                    toggleButton.textContent = "▶";
-                }
-                isPyramidVisible = !isPyramidVisible;
-            });
-
-            // Set up the new trophic pyramid toggle
-            const trophicPyramidContainer = document.querySelector(".trophic-pyramid");
-            const trophicToggleButton = document.createElement("button");
-            trophicToggleButton.id = "toggle-trophic";
-            trophicToggleButton.textContent = "◀";
-            trophicPyramidContainer.appendChild(trophicToggleButton);
-            let isTrophicVisible = true;
-            trophicToggleButton.addEventListener("click", function () {
-                if (isTrophicVisible) {
-                    trophicPyramidContainer.classList.add("hidden");
-                    trophicToggleButton.textContent = "◀";
-                } else {
-                    trophicPyramidContainer.classList.remove("hidden");
-                    trophicToggleButton.textContent = "▶";
-                }
-                isTrophicVisible = !isTrophicVisible;
-            });
-        });
-
-        // Function to create and populate the trophic level pyramid
-        function createTrophicLevelPyramid(data) {
-            // Find the maximum trophic level to determine pyramid height
-            let maxTrophicLevel = 0;
-            data.organisms.forEach(organism => {
-                if (organism.trophicLevels && organism.trophicLevels.length > 0) {
-                    const maxLevel = Math.max(...organism.trophicLevels);
-                    maxTrophicLevel = Math.max(maxTrophicLevel, maxLevel);
-                }
-            });
-
-            const trophicContainer = document.getElementById("trophic-level-container");
-            
-            // Clear any existing content
-            trophicContainer.innerHTML = "";
-            
-            // Create a level for each trophic level (including 0 for autotrophs)
-            for (let level = 0; level <= maxTrophicLevel; level++) {
-                const levelDiv = document.createElement("div");
-                levelDiv.className = "trophic-level";
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Set background color based on trophic level
-                let levelColor, levelName;
-                switch(level) {
-                    case 0:
-                        levelColor = trophicLevels.autotroph.color;
-                        levelName = "Autotrophs";
-                        break;
-                    case 1:
-                        levelColor = trophicLevels.primary.color;
-                        levelName = "Primary Consumers";
-                        break;
-                    case 2:
-                        levelColor = trophicLevels.secondary.color;
-                        levelName = "Secondary Consumers";
-                        break;
-                    case 3:
-                        levelColor = trophicLevels.tertiary.color;
-                        levelName = "Tertiary Consumers";
-                        break;
-                    case 4:
-                        levelColor = trophicLevels.quaternary.color;
-                        levelName = "Quaternary Consumers";
-                        break;
-                    default:
-                        levelColor = "#888";
-                        levelName = `Level ${level} Consumers`;
-                }
-                
-                levelDiv.style.backgroundColor = `${levelColor}33`; // Add 33 for 20% opacity
-                levelDiv.style.border = `2px solid ${levelColor}`;
-                
-                // Add level name
-                const nameDiv = document.createElement("div");
-                nameDiv.className = "trophic-level-name";
-                nameDiv.textContent = levelName;
-                levelDiv.appendChild(nameDiv);
-                
-                // Filter organisms that belong to this trophic level
-                const levelOrganisms = data.organisms.filter(organism => 
-                    organism.trophicLevels && organism.trophicLevels.includes(level)
-                );
-                
-                // Add organism icons to this level
-                levelOrganisms.forEach(organism => {
-                    const iconDiv = document.createElement("div");
-                    iconDiv.className = "organism-icon";
-                    iconDiv.title = organism.name;
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
                     
-                    const img = document.createElement("img");
-                    img.src = organism.image_url;
-                    img.alt = organism.name;
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
                     
-                    iconDiv.appendChild(img);
-                    levelDiv.appendChild(iconDiv);
-                });
-                
-                // Add the level to the container
-                trophicContainer.appendChild(levelDiv);
-            }
-        }
-
-        // Assuming your JSON data is stored in a variable called "data"
-        function displayEcosystemTitle(data) {
-            if (!data || !data.ecosystem) return; // Safety check
-
-            let titleElement = document.createElement("div");
-            titleElement.id = "ecosystem-title";
-            titleElement.textContent = data.ecosystem; // Set text to ecosystem name
-            document.body.appendChild(titleElement);
-        }
-
-        // Define trophic levels and colors
-        const trophicLevels = {
-            "autotroph": { name: "Autotroph", color: "#4CAF50" },
-            "primary": { name: "Primary Consumer", color: "#FF7043" },
-            "secondary": { name: "Secondary Consumer", color: "#FFEB3B" },
-            "tertiary": { name: "Tertiary Consumer", color: "#5d22ff" },
-            "quaternary": { name: "Quaternary Consumer", color: "#ff00ff" }  // Add Quaternary Consumer
-        };
-
-        // Keep the original calculateTrophicLevels function exactly as it is
-        function calculateTrophicLevels() {
-            // Initialize with autotrophs at level 0
-            const trophicMap = new Map();
-            data.organisms.forEach(organism => {
-                if (organism.autotroph) {
-                    organism.trophicLevels = [0];  // Start with autotroph as level 0
-                    trophicMap.set(organism.name, [0]);
-                } else {
-                    organism.trophicLevels = [];  // Empty array for non-autotrophs
-                }
-            });
-
-            // Propagate levels based on feeding relationships
-            let changed = true;
-            while (changed) {
-                changed = false;
-                data.relationships.forEach(rel => {
-                    const foodLevel = trophicMap.get(rel.food_animal);
-                    if (foodLevel) {
-                        const predator = data.organisms.find(o => o.name === rel.feeding_animal);
-                        const predatorCurrentLevels = trophicMap.get(predator.name) || [];
-                        const newLevel = Math.max(...foodLevel) + 1;  // Determine the next trophic level
-
-                        if (!predatorCurrentLevels.includes(newLevel)) {
-                            predator.trophicLevels.push(newLevel);
-                            trophicMap.set(predator.name, predator.trophicLevels);
-                            changed = true;
-                        }
+                    if (particle.x < 0 || particle.x > canvas.width) {
+                        particle.vx = -particle.vx;
+                    }
+                    
+                    if (particle.y < 0 || particle.y > canvas.height) {
+                        particle.vy = -particle.vy;
                     }
                 });
             }
+            
+            animate();
+            
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        });
 
-            // Assign trophic colors for each level
-            data.organisms.forEach(organism => {
-                organism.trophicLevels.forEach(level => {
-                    if (level === 0) {
-                        organism.color = trophicLevels.autotroph.color;
-                        organism.trophicName = trophicLevels.autotroph.name;
-                    } else if (level === 1) {
-                        organism.color = trophicLevels.primary.color;
-                        organism.trophicName = trophicLevels.primary.name;
-                    } else if (level === 2) {
-                        organism.color = trophicLevels.secondary.color;
-                        organism.trophicName = trophicLevels.secondary.name;
-                    } else if (level === 3) {
-                        organism.color = trophicLevels.tertiary.color;
-                        organism.trophicName = trophicLevels.tertiary.name;
-                    } else if (level === 4) {
-                        organism.color = trophicLevels.quaternary.color;
-                        organism.trophicName = trophicLevels.quaternary.name;
-                    }
-                });
+        // Add this JavaScript to your existing script
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectsButton = document.getElementById('projectsButton');
+            const projectsWindow = document.getElementById('projectsWindow');
+            const closeButton = document.getElementById('closeProjects');
+            const overlay = document.getElementById('overlay');
+            
+            // Open projects window
+            projectsButton.addEventListener('click', function() {
+                overlay.style.display = 'block';
+                projectsWindow.style.display = 'block';
+                
+                // Force reflow to ensure the transition works
+                void projectsWindow.offsetWidth;
+                
+                overlay.style.opacity = '1';
+                projectsWindow.classList.add('active');
             });
             
-            // Add this line to create the trophic pyramid after calculating levels
-            createTrophicLevelPyramid(data);
-        }
-
-        // Function to calculate and display ecosystem statistics
-        function calculateEcosystemStats(data) {
-            if (!data || !data.organisms || !data.relationships) {
-                console.error("Cannot calculate stats: Data is incomplete");
-                return;
+            // Close projects window
+            function closeProjectsWindow() {
+                overlay.style.opacity = '0';
+                projectsWindow.classList.remove('active');
+                
+                // Wait for animations to finish before hiding elements
+                setTimeout(function() {
+                    overlay.style.display = 'none';
+                    projectsWindow.style.display = 'none';
+                }, 300);
             }
             
-            const stats = {
-                totalOrganisms: data.organisms.length,
-                autotrophs: data.organisms.filter(org => org.autotroph).length,
-                heterotrophs: data.organisms.filter(org => !org.autotroph).length,
-                feedingRelationships: data.relationships.length,
-                topConsumers: 0,
-                foodChains: 0,
-                averageTrophicLevel: 0,
-                maxTrophicLevel: 0
-            };
+            closeButton.addEventListener('click', closeProjectsWindow);
+            overlay.addEventListener('click', closeProjectsWindow);
             
-            // Find top consumers (organisms that are not eaten by any other organism)
-            const preyList = new Set(data.relationships.map(rel => rel.food_animal));
-            const predatorList = new Set(data.relationships.map(rel => rel.feeding_animal));
-            const topConsumers = data.organisms.filter(org => 
-                !preyList.has(org.name) && predatorList.has(org.name)
-            );
-            stats.topConsumers = topConsumers.length;
+            // Prevent closing when clicking inside the projects window
+            projectsWindow.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
             
-            // Find the maximum trophic level
-            let totalLevels = 0;
-            let totalOrganismsWithLevels = 0;
-            
-            data.organisms.forEach(org => {
-                if (org.trophicLevels && org.trophicLevels.length > 0) {
-                    const maxOrgLevel = Math.max(...org.trophicLevels);
-                    stats.maxTrophicLevel = Math.max(stats.maxTrophicLevel, maxOrgLevel);
-                    totalLevels += maxOrgLevel;
-                    totalOrganismsWithLevels++;
+            // Close with escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && projectsWindow.classList.contains('active')) {
+                    closeProjectsWindow();
                 }
             });
-            
-            // Calculate average trophic level
-            stats.averageTrophicLevel = totalOrganismsWithLevels > 0 ? 
-                (totalLevels / totalOrganismsWithLevels).toFixed(2) : 0;
-            
-            // Calculate number of food chains using DFS
-            const autotrophs = data.organisms.filter(org => org.autotroph);
-            let totalFoodChains = 0;
-            
-            // Build adjacency list for faster traversal
-            const adjacencyList = {};
-            data.organisms.forEach(org => {
-                adjacencyList[org.name] = [];
-            });
-            
-            data.relationships.forEach(rel => {
-                adjacencyList[rel.food_animal].push(rel.feeding_animal);
-            });
-            
-            // DFS function to count paths from source to any top consumer
-            function countPaths(current, visited = new Set()) {
-                // Avoid cycles
-                if (visited.has(current)) return 0;
-                
-                // Create a new visited set that includes the current node
-                const newVisited = new Set(visited);
-                newVisited.add(current);
-                
-                // If this is a top consumer (has no predators)
-                if (!adjacencyList[current] || adjacencyList[current].length === 0) {
-                    return 1; // Found a complete path
-                }
-                
-                // Count paths through all consumers of this organism
-                let paths = 0;
-                for (const consumer of adjacencyList[current]) {
-                    paths += countPaths(consumer, newVisited);
-                }
-                
-                return paths;
-            }
-            
-            // Count paths starting from each autotroph
-            autotrophs.forEach(autotroph => {
-                totalFoodChains += countPaths(autotroph.name);
-            });
-            
-            stats.foodChains = totalFoodChains;
-            
-            // Create or update the stats display
-            displayEcosystemStats(stats);
-            
-            return stats;
-        }
-
-        // Function to display the calculated stats
-        function displayEcosystemStats(stats) {
-            console.log(stats);
-        }
-
-        // Create SVG element
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        
-        const svg = d3.select("#food-web").append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        // Add zoom behavior
-        let transform = d3.zoomIdentity;
-        const zoom = d3.zoom()
-            .scaleExtent([0.1, 3])
-            .on("zoom", (event) => {
-                transform = event.transform;
-                g.attr("transform", transform);
-            });
-
-        svg.call(zoom);
-        
-        // Create a group for all elements
-        g = svg.append("g");
-
-        // Define arrow marker
-        g.append("defs").append("marker")
-            .attr("id", "arrow")
-            .attr("viewBox", "0 -5 10 10")
-            .attr("refX", 5)    // Adjusted to position the marker at the start
-            .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M10,-5L0,0L10,5") // Reversed arrow shape so the tip points left
-            .attr("fill", "#90a4ae");
-
-        // UUID generation function
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0,
-                    v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
+        });
     </script>
 </body>
 </html>

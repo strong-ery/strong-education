@@ -179,6 +179,7 @@
         { "feeding_animal": "Chickadee", "food_animal": "Dragonfly" },
         { "feeding_animal": "Chickadee", "food_animal": "Butterfly" },
         { "feeding_animal": "Brown Bear", "food_animal": "Deer" },
+        { "feeding_animal": "Eagle", "food_animal": "Salmon" },
         { "feeding_animal": "Eagle", "food_animal": "Chickadee" }
     ]
 }

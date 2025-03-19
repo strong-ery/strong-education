@@ -1,0 +1,115 @@
+{
+    "ecosystem": "wheel",
+    "organisms": [
+        {
+            "name": "seg0",
+            "autotroph": true,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg1",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg2",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg3",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg4",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg5",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg6",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg7",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg8",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg9",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "seg10",
+            "autotroph": false,
+            "category": "seg",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        },
+        {
+            "name": "centerpiece",
+            "autotroph": false,
+            "category": "center",
+            "description": "",
+            "image_url": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.gazebocreations.com%2Fimages%2Fswatches%2Flarge%2FHOM_Black.gif&f=1&nofb=1&ipt=665f0c6c67318413750a05f7502561dc1c4f8b660d53997967b8b9c03c08fe03&ipo=images"
+        }
+    ],
+    "relationships": [
+        { "feeding_animal": "seg1", "food_animal": "seg0" },
+        { "feeding_animal": "seg2", "food_animal": "seg1" },
+        { "feeding_animal": "seg3", "food_animal": "seg2" },
+        { "feeding_animal": "seg4", "food_animal": "seg3" },
+        { "feeding_animal": "seg5", "food_animal": "seg4" },
+        { "feeding_animal": "seg6", "food_animal": "seg5" },
+        { "feeding_animal": "seg7", "food_animal": "seg6" },
+        { "feeding_animal": "seg8", "food_animal": "seg7" },
+        { "feeding_animal": "seg9", "food_animal": "seg8" },
+        { "feeding_animal": "seg10", "food_animal": "seg9" },
+        { "feeding_animal": "seg10", "food_animal": "seg0" },
+
+        { "feeding_animal": "centerpiece", "food_animal": "seg0" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg1" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg2" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg3" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg4" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg5" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg6" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg7" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg8" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg9" },
+        { "feeding_animal": "centerpiece", "food_animal": "seg10" }
+
+    ]
+}

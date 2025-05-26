@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lord of the Flies: Free Will vs. Free Won't</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #181818, #0e0e0e);
+            color: #333;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .brochure {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .highlight-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .highlight-toggle:hover {
+            background: #555;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .highlight-toggle.active {
+            background: #ff9800;
+            color: #333;
+        }
+        
+        .highlight-toggle.active:hover {
+            background: #ffb74d;
+        }
+
+        .highlightred {
+            background: #ff8989;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #202020, #464646);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h2 {
+            font-size: 1.3em;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        
+        .left-panel, .right-panel {
+            padding: 30px;
+        }
+        
+        .left-panel {
+            background: #f8f9fa;
+            border-right: 3px solid #333;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-left-color: #666;
+        }
+        
+        .section h3 {
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #666;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .section:hover h3 {
+            color: #000;
+        }
+        
+        .allegory-explanation {
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            border-left-color: #8f8f8f;
+        }
+        
+        .allegory-explanation:hover {
+            border-left-color: #ff0000;
+        }
+        
+        .character-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .character-card {
+            background: linear-gradient(135deg, #fafafa, #f0f0f0);
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .character-card:hover {
+            transform: translateX(5px);
+            border-color: #4caf50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+        }
+        
+        .character-card h4 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .character-card:hover h4 {
+            color: #2e7d32;
+        }
+        
+        .archetype {
+            font-style: italic;
+            color: #1976d2;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .symbol-card {
+            background: linear-gradient(135deg, #fafafa, #f0f0f0);
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .symbol-card:hover {
+            transform: translateX(5px);
+            border-color: #9c27b0;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.2);
+        }
+        
+        .symbol-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .symbol-card:hover h4 {
+            color: #7b1fa2;
+        }
+        
+        .theme-card {
+            background: linear-gradient(135deg, #fafafa, #f0f0f0);
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .theme-card:hover {
+            transform: translateX(5px);
+            border-color: #2196f3;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+        }
+        
+        .theme-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .theme-card:hover h4 {
+            color: #1565c0;
+        }
+        
+        .quote-card {
+            background: linear-gradient(135deg, #fafafa, #f0f0f0);
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quote-card:hover {
+            transform: translateX(5px);
+            border-color: #ffc107;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+        }
+        
+        .quote-card::before {
+            content: '"';
+            font-size: 4em;
+            color: rgba(255, 193, 7, 0.2);
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: serif;
+            transition: color 0.3s ease;
+        }
+        
+        .quote-card:hover::before {
+            color: rgba(255, 193, 7, 0.4);
+        }
+        
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 10px;
+            padding-left: 30px;
+        }
+        
+        .quote-citation {
+            font-weight: bold;
+            color: #f57c00;
+            text-align: right;
+        }
+        
+        .explanation {
+            margin-top: 10px;
+            font-size: 0.95em;
+            color: #555;
+        }
+        
+        .brain-icon {
+            width: 30px;
+            height: 30px;
+            background: #343434;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+        }
+        
+        .brain-icon::before {
+            content: '🧠';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #fff9c4 0%, #fff9c4 100%);
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .highlights-hidden .highlight {
+            background: transparent;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 3px solid #8b0000;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .highlight-toggle {
+                position: static;
+                margin: 0 auto 20px;
+                display: block;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="brochure">
+        <button class="highlight-toggle active" onclick="toggleHighlights()">
+            <span id="toggle-text">Hide Highlights</span>
+        </button>
+        
+        <div class="header">
+            <h1>Lord of the Flies: Free Will vs. Free Won't</h1>
+            <h2>A Psychoanalytical Allegory Through Benjamin Libet's Experiment</h2>
+        </div>
+        
+        <div class="content">
+            <div class="left-panel">
+                <div class="section allegory-explanation">
+                    <h3><span class="brain-icon"></span>Allegorical Framework</h3>
+                    <p>Benjamin Libet's 1970s experiment uncovered that <span class="highlight">the brain initiates actions before conscious awareness of the decision</span>. This discovery goes against the traditional idea of free will, suggesting we may only possess "free won't". "Free won't", is a term for the ability to veto impulses after they begin. In the Lord of the Flies, the boys slow but certain descent into savagery shows this unconscious inevitability. Their transformation feels less like conscious choice and more like <span class="highlight">a compulsive choice stemming from their subconcious</span>. Golding's story highlights how civilization's veneer dissolves when the unconscious overrides rational thought. This perspective shows the novel's deeper psychological truth: we may not choose our impulses, but we have the power to resist them. The island becomes a place where Libet's theories play out dramatically, showing the struggle between conscious intention and unconscious action.</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Character Analysis</h3>
+                    <div class="character-grid">
+                        <div class="character-card">
+                            <h4>Jack Merridew</h4>
+                            <div class="archetype">The Savage Leader / The Unconscious Id</div>
+                            <p><strong>Allegorical Connection:</strong> Jack represents total unconscious drive. His transformation into savagery <span class="highlight">happens before conscious decisionmaking</span>. He represents Libet's discovery that actions begin subconsciously. Jack's hunting obsession and very violent impulses emerge from primal brain pathways and patterns, not from rational choice.</p>
+                        </div>
+                        
+                        <div class="character-card">
+                            <h4>Ralph</h4>
+                            <div class="archetype">The Rational Leader / The Conscious Ego</div>
+                            <p><strong>Allegorical Connection:</strong> Ralph represents conscious choice and rational decisionmaking. He has great difficulty maintaining civilization through intentional choice, representing humanity's attempt to <span class="highlight">overcome unconscious impulses through conscious effort and "free won't."</span></p>
+                        </div>
+                        
+                        <div class="character-card">
+                            <h4>Piggy</h4>
+                            <div class="archetype">The Intellectual / The Superego</div>
+                            <p><strong>Allegorical Connection:</strong> Piggy symbolizes total and pure rational thought and the <span class="highlight">conscious mind's attempt to veto destructive impulses.</span> His glasses (vision/insight) and his constant choice of rationality represent humanity's capacity for the conscious override of unconscious drives or motives.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Symbolic Analysis</h3>
+                    <div class="symbol-card">
+                        <h4>The Conch Shell</h4>
+                        <p><strong>Meaning:</strong> The conch represents conscious democratic choice, and rational communication. The conch needs deliberate action to use; speaking only when holding it represents the use of <span class="highlight">"free won't"</span>.</p>
+                        <p><strong>Allegory Connection:</strong> As the boys unconscious motives strengthen, the conch loses its power, showing how conscious control weakens when primal impulses are allowed to dominate.</p>
+                    </div>
+                    
+                    <div class="symbol-card">
+                        <h4>The Lord of the Flies</h4>
+                        <p><strong>Meaning:</strong> The severed pig's head represents the unconscious mind's tendency to have dark impulses. The source of actions that begin before conscious awareness.</p>
+                        <p><strong>Allegory Connection:</strong> It literally speaks to Simon about the evil within, representing how unconscious motives communicate with consciousness. Which mirrors Libet's <span class="highlight">brain activity preceding awareness.</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="section">
+                    <h3>Thematic Analysis</h3>
+                    <div class="theme-card">
+                        <h4>Civilization vs. Savagery</h4>
+                        <p><strong>Allegory Connection:</strong> Civilization represents conscious control and "free won't" (the ability to veto destructive impulses). Savagery represents unconscious motives that <span class="highlight">initiate before conscious awareness</span>. The boys descent shows unconscious impulses gradually overwhelming their attempts at conscious restraint.</p>
+                    </div>
+                    
+                    <div class="theme-card">
+                        <h4>Loss of Innocence</h4>
+                        <p><strong>Allegory Connection:</strong> Innocence represents the illusion of complete free will. The boys lose this innocence as they discover their <span class="highlight">actions stem from unconscious drives they cannot fully control</span>, mirroring humanity's realization of the limits of conscious choice.</p>
+                    </div>
+                    
+                    <div class="theme-card">
+                        <h4>The Nature of Evil</h4>
+                        <p><strong>Allegory Connection:</strong> Evil isn't conscious choice but unconscious impulse(s). The novel suggests that destructive actions <span class="highlight">begin in the brain before moral reasoning can intervene</span>, making evil an unconscious default that requires conscious effort to override.</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Critical Quotations</h3>
+                    <div class="quote-card">
+                        <div class="quote-text">Maybe there is a beast... maybe it's only us.</div>
+                        <div class="quote-citation">(Golding 89)</div>
+                        <div class="explanation">Simon's insight reveals that the "beast" exists within their unconscious minds. The unconcious mind IS the source of the <span class="highlight">impulses that arise before conscious awareness</span>, perfectly aligning with Libet's discovery of pre-conscious brain activity.</div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="quote-text">The thing is - fear can't hurt you any more than a dream.</div>
+                        <div class="quote-citation">(Golding 82)</div>
+                        <div class="explanation">Jack's dismissal of conscious fear represents his surrender to unconscious drives. He's <span class="highlight">abandoning "free won't"</span> (the conscious ability to veto destructive impulses in favor of acting on primal instincts.)</div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="quote-text">Which is better - to have rules and agree, or to hunt and kill?</div>
+                        <div class="quote-citation">(Golding 180)</div>
+                        <div class="explanation">Piggy's question strengthens the central conflict between conscious choice (rules/agreement) and unconscious drive (hunting/killing). It embodies the <span class="highlight">tension between free will and predetermined neural impulses</span>.</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Benefits of This Analysis</h3>
+                    <p>Applying Libet's free will experiment to Lord of the Flies illuminates the novel's psychological depth beyond traditional good vs. evil interpretations. This perspective reveals how Golding almost <span class="highlight">anticipated modern neuroscience</span>, showing characters as complex beings driven by unconscious processes rather than simple moral choices. It explains why the boys transformation feels <span class="highlight">inevitable rather than chosen</span>, and why rational characters like Ralph and Piggy struggle against seemingly unstoppable forces. This analysis also demonstrates the novel's relevance to modern debates about moral responsibility, criminal justice, and human nature. <span class="highlightred">If our actions begin unconsciously, how responsible are we for our choices?</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Works Cited:</strong> Golding, William. <em>Lord of the Flies</em>. Faber & Faber, 1954. | Libet, Benjamin. "Unconscious cerebral initiative and the role of conscious will in voluntary action." <em>Behavioral and Brain Sciences</em>, vol. 8, no. 4, 1985, pp. 529-539.</p>
+        </div>
+    </div>
+
+    <script>
+        let highlightsVisible = true;
+        
+        function toggleHighlights() {
+            const brochure = document.querySelector('.brochure');
+            const button = document.querySelector('.highlight-toggle');
+            const buttonText = document.getElementById('toggle-text');
+            
+            highlightsVisible = !highlightsVisible;
+            
+            if (highlightsVisible) {
+                brochure.classList.remove('highlights-hidden');
+                button.classList.add('active');
+                buttonText.textContent = 'Hide Highlights';
+            } else {
+                brochure.classList.add('highlights-hidden');
+                button.classList.remove('active');
+                buttonText.textContent = 'Show Highlights';
+            }
+        }
+    </script>
+</body>
+</html>

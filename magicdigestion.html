@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Magical Story of Digestion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .brochure {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.3"/><circle cx="80" cy="40" r="1.5" fill="white" opacity="0.2"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.4"/></svg>');
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            font-size: 1.4em;
+            margin: 20px 0 10px 0;
+            position: relative;
+        }
+        
+        .organ-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .organ-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #ffa726;
+        }
+        
+        .organ-card h4 {
+            color: #e67e22;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .enzyme-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .enzyme-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+        }
+        
+        .enzyme-item h4 {
+            color: #2980b9;
+            margin-bottom: 8px;
+        }
+        
+        .breakdown-section {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .breakdown-section h3 {
+            color: white;
+            border-bottom: 2px solid white;
+            padding-bottom: 10px;
+        }
+        
+        .pathology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pathology-card {
+            background: #fff5f5;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .pathology-card h4 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .highlight-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .resources {
+            background: #f8f9fa;
+            border: 2px solid #6c757d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .resources h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .digestion-flow {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="brochure">
+        <div class="header">
+            <h1>The Magical Story of Digestion</h1>
+            <p>A Journey Through Your Body's Amazing Food Processing System</p>
+        </div>
+        
+        <div class="content">
+            <!-- Project Information -->
+            <div class="section">
+                <h2>Project Information</h2>
+                <p><strong>Individual Project Completion:</strong> I did this by myself, starting from scratch; as Josh didn't seem interested in completing his part. Sorry it took a while, as I wanted to go as in depth as possible!</p>
+            </div>
+
+            <!-- Organs of the Digestive System -->
+            <div class="section">
+                <h2>The Organs: Your Body's Food Processing Factory</h2>
+                <div class="organ-grid">
+                    <div class="organ-card">
+                        <h4>Mouth</h4>
+                        <p>Where digestion begins. The mouth uses both mechanical digestion (mastication) and chemical digestion using an enzyme called salivary amylase. The saliva moistens the food and starts breaking down starch into smaller molecules of sugar. The tongue aids in forming the food bolus (blob of chewed up food) for swallowing.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Esophagus</h4>
+                        <p>A tube of muscle that connects your mouth to your stomach. Using timed muscle contractions (peristalsis), it pushes the food bolus downward. The upper and lower sphincters in the esophagus help control food entry and prevent the stomach acid from going back up the throat.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Stomach</h4>
+                        <p>A big mixing chamber, where protein processing happens. The stomach churns the bolus mechanically and hydrochloric acid and pepsinogen is added into the mix. The stomach is at a pH of 1.5-3.5, which is perfect to activate the enzyme pepsin to digest protein and kill any harmful bacteria.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Pancreas</h4>
+                        <p>This is a big enzyme center. The pancreas makes “pancreatic juice” that has sodium bicarbonate, and other enzymes including pancreatic amylase, trypsin, and lipase. It also makes insulin to regulate blood sugar.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Sphincters</h4>
+                        <p>The sphincters of the digestive system control the movement of food. The esophageal sphincters regulate entry to the stomach, and the pyloric sphincter controls when the stomach gets emptied.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Gallbladder</h4>
+                        <p>The gallbladder stores bile. It concentrates and stores bile made by the liver. When fatty food enters the small intestine, the gallbladder releases that bile, which “emulsifies” fats for easier enzymatic digestion.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Intestines</h4>
+                        <p><strong>Small Intestine:</strong> Where most food is absorbed. It’s three parts; the duodenum, jejunum, and ileum. It has little villi that increase the surface area 600 fold for maximum absorption of nutrients.<br><br><strong>Large Intestine:</strong> Water absorption and waste formation. It absorbs all remaining water, electrolytes, and keeps the good bacteria that make vitamins.</p>
+                    </div>
+                    
+                    <div class="organ-card">
+                        <h4>Liver</h4>
+                        <p>Multiple functions. It makes bile for fat digestion, processes absorbed nutrients, detoxifies harmful stuff, stores glycogen, makes plasma proteins, and processes drugs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enzymes -->
+            <div class="section">
+                <h2>The Enzymes: Molecular Scissors of Digestion</h2>
+                <div class="enzyme-list">
+                    <div class="enzyme-item">
+                        <h4>Pepsin</h4>
+                        <p><strong>Location:</strong> Stomach<br>
+                        <strong>Function:</strong>  Breaks down proteins into smaller “polypeptides”. Activated from pepsinogen by stomach acid. It works optimally at pH 1.5-2.0, making it perfectly suited for the stomach's acidic environment.</p>
+                    </div>
+                    
+                    <div class="enzyme-item">
+                        <h4>Salivary Amylase</h4>
+                        <p><strong>Location:</strong> Mouth<br>
+                        <strong>Function:</strong> Begins digesting starch by breaking down complex carbohydrates into maltose and smaller sugars. It works at a neutral pH but it becomes inactive in the stomach's acidic environment.</p>
+                    </div>
+                    
+                    <div class="enzyme-item">
+                        <h4>Pancreatic Amylase</h4>
+                        <p><strong>Location:</strong> Small intestine (from pancreas)<br>
+                        <strong>Function:</strong> It continues breaking down carbohydrates where the salivary amylase left off. It works in the alkaline environment of the small intestine to completely break down starches into maltose.</p>
+                    </div>
+                    
+                    <div class="enzyme-item">
+                        <h4>Trypsin</h4>
+                        <p><strong>Location:</strong> Small intestine (from pancreas)<br>
+                        <strong>Function:</strong> It continues protein digestion started by pepsin. It’s activated from trypsinogen by “enterokinase”. Splits proteins at specific amino acid sequences, working optimally at alkaline pH.</p>
+                    </div>
+                    
+                    <div class="enzyme-item">
+                        <h4>Erepsin</h4>
+                        <p><strong>Location:</strong> Small intestine<br>
+                        <strong>Function:</strong> Final step in protein digestion! These enzymes break dipeptides and tripeptides into individual amino acids that can be absorbed into the bloodstream.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- pH and Enzyme Switching -->
+            <div class="section">
+                <h2>The pH Story: Why Location Matters</h2>
+                <div class="highlight-box">
+                    <h4>Stomach to Small Intestine Transition</h4>
+                    <p>When food moves from the acidic stomach (pH 1.5-3.5) to the alkaline small intestine (pH 8-8.5), stomach enzymes like pepsin become inactivated. The pancreas releases sodium bicarbonate to neutralize the acid, creating the perfect environment for pancreatic enzymes to function.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4>What If Enzymes Were Switched?</h4>
+                    <p><strong>Catastrophic Results!</strong> If stomach enzymes moved to the small intestine, they would be inactive due to high pH and couldn't digest proteins. If intestinal enzymes moved to the stomach, the acid would denature them immediately, stopping carbohydrate and remaining protein digestion. This would lead to malnutrition, as proteins and carbohydrates wouldn't be broken down into absorbable units.</p>
+                </div>
+            </div>
+
+            <!-- Chemical vs Mechanical Digestion -->
+            <div class="section">
+                <h2>Two Types of Digestion: Breaking It Down</h2>
+                <div class="digestion-flow">
+                    <h3>Mechanical Digestion</h3>
+                    <p><strong>Physical breakdown of food without changing chemical structure</strong></p>
+                    <p><strong>Locations:</strong></p>
+                    <p>• <strong>Mouth:</strong> Chewing (mastication) grinds food into smaller pieces</p>
+                    <p>• <strong>Stomach:</strong> Churning action mixes food with gastric juices, creating chyme</p>
+                    <p>• <strong>Small Intestine:</strong> Segmentation contracts intestinal muscles to mix chyme with digestive juices</p>
+                </div>
+                
+                <div class="digestion-flow">
+                    <h3>Chemical Digestion</h3>
+                    <p><strong>Enzymes break chemical bonds to create smaller, absorbable molecules</strong></p>
+                    <p><strong>Locations:</strong></p>
+                    <p>• <strong>Mouth:</strong> Salivary amylase begins starch breakdown</p>
+                    <p>• <strong>Stomach:</strong> Pepsin digests proteins, HCl denatures protein structures</p>
+                    <p>• <strong>Small Intestine:</strong> Pancreatic enzymes complete digestion of all macronutrients</p>
+                    <p>• <strong>Note:</strong> Some organs like the stomach and small intestine perform BOTH types!</p>
+                </div>
+            </div>
+
+            <!-- Nutrient Breakdown -->
+            <div class="section">
+                <h2>The Great Breakdown: From Complex to Simple</h2>
+                
+                <div class="breakdown-section">
+                    <h3>Carbohydrate Digestion Journey</h3>
+                    <p><strong>Complex Carbohydrates → Disaccharides → Monosaccharides</strong></p>
+                    <p><strong>Step 1:</strong> Mouth - Salivary amylase breaks starch into maltose</p>
+                    <p><strong>Step 2:</strong> Small intestine - Pancreatic amylase continues starch breakdown</p>
+                    <p><strong>Step 3:</strong> Brush border enzymes (maltase, sucrase, lactase) break disaccharides into glucose, fructose, and galactose</p>
+                    <p><strong>Absorption:</strong> Monosaccharides absorbed in small intestine via active transport and facilitated diffusion, then transported to liver via hepatic portal circulation</p>
+                </div>
+                
+                <div class="breakdown-section">
+                    <h3>Protein Digestion Journey</h3>
+                    <p><strong>Proteins → Polypeptides → Dipeptides/Tripeptides → Amino Acids</strong></p>
+                    <p><strong>Step 1:</strong> Stomach - Pepsin cleaves proteins into polypeptides</p>
+                    <p><strong>Step 2:</strong> Small intestine - Trypsin, chymotrypsin, and elastase break polypeptides into smaller fragments</p>
+                    <p><strong>Step 3:</strong> Brush border peptidases (erepsin) break dipeptides and tripeptides into individual amino acids</p>
+                    <p><strong>Absorption:</strong> Amino acids absorbed in small intestine via active transport using specific carrier proteins, then enter hepatic portal circulation</p>
+                </div>
+                
+                <div class="breakdown-section">
+                    <h3>Lipid Digestion Journey</h3>
+                    <p><strong>Triglycerides → Fatty Acids + Monoglycerides → Chylomicrons</strong></p>
+                    <p><strong>Step 1:</strong> Small intestine - Bile salts emulsify large fat droplets into smaller ones (like soap breaking up grease!)</p>
+                    <p><strong>Step 2:</strong> Pancreatic lipase breaks triglycerides into fatty acids and monoglycerides</p>
+                    <p><strong>Step 3:</strong> Products form micelles with bile salts for absorption</p>
+                    <p><strong>Absorption:</strong> Short-chain fatty acids enter hepatic portal circulation; long-chain fatty acids are reassembled into triglycerides, packaged into chylomicrons, and enter lymphatic system before reaching bloodstream</p>
+                </div>
+            </div>
+
+            <!-- Nutritional Deficiencies -->
+            <div class="section">
+                <h2>When Things Go Wrong: Nutritional Deficiencies</h2>
+                <div class="pathology-grid">
+                    <div class="pathology-card">
+                        <h4>Iron Deficiency Anemia</h4>
+                        <p><strong>What it is:</strong> Insufficient iron leading to reduced red blood cell production and oxygen-carrying capacity</p>
+                        <p><strong>Impact:</strong> Fatigue, weakness, pale skin, cold hands/feet, brittle nails, unusual cravings for ice or starch, rapid heartbeat, and difficulty concentrating</p>
+                        <p><strong>Treatment:</strong> Iron-rich foods (red meat, spinach, beans), iron supplements, vitamin C to enhance absorption, and treating underlying causes like bleeding</p>
+                    </div>
+                    
+                    <div class="pathology-card">
+                        <h4>Vitamin D Deficiency</h4>
+                        <p><strong>What it is:</strong> Inadequate vitamin D levels affecting calcium absorption and bone health</p>
+                        <p><strong>Impact:</strong> Bone pain, muscle weakness, increased fracture risk, delayed healing, depression, frequent infections, and in children, rickets (soft, weak bones)</p>
+                        <p><strong>Treatment:</strong> Sunlight exposure, vitamin D supplements, fortified foods (milk, cereals), fatty fish consumption, and calcium-rich diet support</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pathologies -->
+            <div class="section">
+                <h2>Digestive System Disorders</h2>
+                <div class="pathology-grid">
+                    <div class="pathology-card">
+                        <h4>Peptic Ulcer Disease</h4>
+                        <p><strong>What it is:</strong> Open sores in the stomach lining or duodenum, often caused by H. pylori bacteria or NSAIDs</p>
+                        <p><strong>Impact:</strong> Burning stomach pain (especially when hungry), nausea, vomiting, loss of appetite, weight loss, and potentially life-threatening bleeding if ulcer perforates</p>
+                        <p><strong>Treatment:</strong> Antibiotics for H. pylori, acid-reducing medications (proton pump inhibitors, H2 blockers), avoiding NSAIDs, dietary modifications, and stress management</p>
+                    </div>
+                    
+                    <div class="pathology-card">
+                        <h4>Inflammatory Bowel Disease (Crohn's Disease)</h4>
+                        <p><strong>What it is:</strong> Chronic inflammatory condition affecting any part of the digestive tract, causing deep tissue inflammation</p>
+                        <p><strong>Impact:</strong> Severe diarrhea, abdominal pain, cramping, blood in stool, weight loss, fatigue, malnutrition, and complications like bowel obstruction or fistulas</p>
+                        <p><strong>Treatment:</strong> Anti-inflammatory medications, immunosuppressants, biologic therapies, nutritional support, dietary modifications, and sometimes surgery to remove damaged bowel sections</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="resources">
+                <h3>Resources Used</h3>
+                <p><strong>Sources:</strong></p>
+                <p>• Notes</p>
+                <p>• <a href="https://www.mayoclinic.org/diseases-conditions/iron-deficiency-anemia/symptoms-causes/syc-20355034">mayoclinic.org - (Iron Deficiency Anemia)</a></p>
+                <p>• <a href="https://www.mayoclinic.org/diseases-conditions/crohns-disease/symptoms-causes/syc-20353304">mayoclinic.org - (Crohn's Disease)</a></p>
+                <p>• <a href="https://my.clevelandclinic.org/health/diseases/10350-peptic-ulcer-disease">clevelandclinic.org - (Peptic Ulcer Disease)</a></p>
+                <p>• <a href="https://my.clevelandclinic.org/health/diseases/15050-vitamin-d-vitamin-d-deficiency">clevelandclinic.org - (Vitamin D Deficiency)</a></p>
+                <p>• <a href="https://www.niddk.nih.gov/health-information/digestive-diseases/digestive-system-how-it-works">nih.gov - (Digestion and How It Works)</a></p>
+                <p>• Probably some other sources I forgot to add and closed after I gathered info...</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Digestive System Journey Project</p>
+            <p>Remember: Your digestive system processes about 10 tons of food in your lifetime! Hope you enjoyed!</p>
+        </div>
+    </div>
+</body>
+</html>

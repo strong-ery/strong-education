@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Photon's Journey - Photosynthesis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            background: #242424;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .brochure {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .journey-step {
+            display: flex;
+            margin-bottom: 40px;
+            align-items: center;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 30px;
+        }
+
+        .journey-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .journey-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-visual {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2.2em;
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .sun { background: linear-gradient(135deg, #ff9a56, #ffad56); }
+        .leaf { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .chloroplast { background: linear-gradient(135deg, #16a085, #1abc9c); }
+        .thylakoid { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+        .calvin { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .atp { background: linear-gradient(135deg, #e74c3c, #e67e22); }
+
+        .step-content {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .step-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .step-description {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .step-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .chemical-equation {
+            background: #f8f9fa;
+            color: #2c3e50;
+            border: 2px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .arrow {
+            display: inline-block;
+            margin: 0 8px;
+            font-size: 1.2em;
+            color: #6c757d;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .fun-fact {
+            background: #e7f3ff;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .fun-fact::before {
+            content: '💡 ';
+            font-style: normal;
+        }
+
+        @media (max-width: 768px) {
+            .journey-step {
+                flex-direction: column !important;
+                text-align: center;
+            }
+            
+            .journey-step:nth-child(even) {
+                flex-direction: column !important;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .step-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="brochure">
+        <div class="header">
+            <h1>A Photon's Journey</h1>
+            <p>The Amazing Adventure of Light Through Photosynthesis</p>
+        </div>
+
+        <div class="content">
+            <div class="journey-step">
+                <div class="step-visual">
+                    <div class="step-icon sun">☀️</div>
+                </div>
+                <div class="step-content">
+                    <h2 class="step-title">Birth in the Sun</h2>
+                    <p class="step-description">Our photon starts its journey inside the Sun, where it's created by nuclear reactions that give the Sun its energy.</p>
+                    <div class="step-details">
+                        <strong>The Journey Begins:</strong> The photon is created when hydrogen atoms combine (fusion) at incredibly hot temperatures. It then travels 150 million kilometers through space, taking 8 minutes and 20 seconds to reach Earth. This photon has just the right amount of energy to be captured by plants.
+                    </div>
+                    <div class="fun-fact">
+                        Fun Fact: It takes a photon up to 100,000 years to travel from the Sun's core to its surface before making the quick trip to Earth!
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-visual">
+                    <div class="step-icon leaf">🍃</div>
+                </div>
+                <div class="step-content">
+                    <h2 class="step-title">Arrival at the Leaf</h2>
+                    <p class="step-description">Our photon hits a leaf and passes through the outer protective layers to get inside.</p>
+                    <div class="step-details">
+                        <strong>Finding the Target:</strong> The photon passes through the waxy outer layer and enters the main part of the leaf where photosynthesis happens. The cells here are packed with tiny green structures called chloroplasts - up to 100 in each cell! The leaf is designed to catch as much sunlight as possible.
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-visual">
+                    <div class="step-icon chloroplast">🔬</div>
+                </div>
+                <div class="step-content">
+                    <h2 class="step-title">Inside the Chloroplast</h2>
+                    <p class="step-description">The photon enters a chloroplast, which is like the plant's solar panel and energy factory.</p>
+                    <div class="step-details">
+                        <strong>The Green Factory:</strong> Inside this tiny green structure, our photon finds stacks of membranes called thylakoids. The chloroplast has its own DNA and can make some of its own materials. It's packed with thousands of special molecules that are ready to capture light energy and turn it into chemical energy.
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-visual">
+                    <div class="step-icon thylakoid">⚡</div>
+                </div>
+                <div class="step-content">
+                    <h2 class="step-title">Light Reactions Begin</h2>
+                    <p class="step-description">Our photon hits a chlorophyll molecule and gives it energy, starting the first part of photosynthesis.</p>
+                    <div class="step-details">
+                        <strong>The Energy Transfer:</strong> The photon gives its energy to an electron in the green chlorophyll molecule, making the electron "excited" and full of energy. This energized electron gets passed along to other molecules. To replace the electron that left, the plant splits water molecules, which releases oxygen gas - the oxygen we breathe!
+                    </div>
+                    <div class="chemical-equation">
+                        2H₂O <span class="arrow">→</span> 4H⁺ + 4e⁻ + O₂<br>
+                        <small>(Water splits to make hydrogen ions, electrons, and oxygen)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-visual">
+                    <div class="step-icon calvin">🔄</div>
+                </div>
+                <div class="step-content">
+                    <h2 class="step-title">The Calvin Cycle</h2>
+                    <p class="step-description">Energy from our photon powers the Calvin cycle, where the plant takes CO₂ from the air and builds sugar molecules.</p>
+                    <div class="step-details">
+                        <strong>Building Sugar:</strong> The ATP and NADPH (energy molecules) created by our photon's energy power this process. Carbon dioxide from the air gets "fixed" or attached to other molecules by an enzyme called RuBisCO. Through several steps, the plant builds glucose (sugar) one carbon atom at a time.
+                    </div>
+                    <div class="chemical-equation">
+                        6CO₂ + Energy <span class="arrow">→</span> Glucose (C₆H₁₂O₆)<br>
+                        <small>(Carbon dioxide plus energy makes sugar)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="journey-step">
+                <div class="step-visual">
+                    <div class="step-icon atp">🔋</div>
+                </div>
+                <div class="step-content">
+                    <h2 class="step-title">ATP Production Complete</h2>
+                    <p class="step-description">Our photon's energy has been successfully converted into chemical energy stored in ATP (energy molecules) and glucose (sugar).</p>
+                    <div class="step-details">
+                        <strong>Energy Stored:</strong> As electrons move through the transport chain, they create a buildup of hydrogen ions. When these ions flow through a special protein called ATP synthase, they power the creation of ATP molecules. Our single photon helped make about 1-2 ATP molecules and contributed to building part of a sugar molecule!
+                    </div>
+                    <div class="fun-fact">
+                        Amazing Result: That single photon from the Sun is now stored as chemical energy that powers life on Earth!
+                    </div>
+                </div>
+            </div>
+
+            <div class="chemical-equation">
+                <strong>Overall Photosynthesis Equation:</strong><br>
+                6CO₂ + 6H₂O + Light Energy <span class="arrow">→</span> C₆H₁₂O₆ + 6O₂ + 6H₂O<br>
+                <small>(Carbon dioxide + Water + Light Energy → Sugar + Oxygen + Water)</small>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>The Journey Complete</h3>
+            <p>From nuclear reactions in the Sun to chemical bonds in a sugar molecule, our photon's 8-minute journey across space became an amazing process through plant cells. This process ultimately powers almost all life on Earth. Every breath you take and every bite you eat depends on millions of photons making this incredible journey every single day.</p>
+        </div>
+    </div>
+</body>
+</html>

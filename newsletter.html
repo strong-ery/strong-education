@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Newspaper Template</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 50%, #e17055 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .newspaper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .newspaper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 50%, #fdcb6e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .newspaper-title {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .newspaper-subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .main-story {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .main-story:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #e17055;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #fdcb6e 0%, #e17055 50%, #d63031 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .main-story:hover .story-image::before {
+            left: 100%;
+        }
+
+        .story-content {
+            padding: 25px;
+        }
+
+        .headline {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            line-height: 1.2;
+            transition: color 0.3s ease;
+        }
+
+        .main-story:hover .headline {
+            color: #e17055;
+        }
+
+        .story-preview {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .expand-btn {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .expand-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.3s ease;
+        }
+
+        .expand-btn:hover::before {
+            left: 100%;
+        }
+
+        .expand-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-section:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-left-color: #e17055;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-section:hover .section-title {
+            color: #e17055;
+        }
+
+        .section-content {
+            font-size: 1em;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        .grid-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        }
+
+        .grid-item {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .grid-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .weather-forecast {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .weather-day {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            color: white;
+            padding: 15px 10px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .weather-day:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .expandable-content.expanded {
+            max-height: 1000px;
+            padding: 25px;
+        }
+
+        .full-story {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .gossip-item {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #d63031;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .gossip-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(214, 48, 49, 0.3);
+        }
+
+        .character-highlight {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .character-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .character-highlight:hover .character-image {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .ad-section {
+            background: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ad-section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .weather-forecast {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .newspaper-title {
+                font-size: 2em;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="newspaper">
+        <header class="header">
+            <h1 class="newspaper-title">[YOUR NEWSPAPER TITLE]</h1>
+            <p class="newspaper-subtitle">Daily Edition • [DATE] • Novel Edition</p>
+        </header>
+
+        <div class="main-content">
+            <div class="main-story" onclick="toggleExpand('main-story')">
+                <div class="story-image">
+                    [MAIN STORY IMAGE]
+                </div>
+                <div class="story-content">
+                    <h2 class="headline">[YOUR MAIN HEADLINE]</h2>
+                    <p class="story-preview">[Your story preview text here - this should be engaging and make readers want to click to read more...]</p>
+                    <button class="expand-btn">Read Full Story</button>
+                </div>
+                <div class="expandable-content" id="main-story">
+                    <div class="full-story">
+                        <h3>The Author's Main News Report</h3>
+                        <p><strong>Universal Thesis:</strong> [Your universal thesis statement here]</p>
+                        <p>[Your full 12+ sentence report as the author convincing readers to read your novel. Include plot summary and deeper meaning...]</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="section-title">Weather Forecast</h3>
+                    <p class="section-content">Mood Development Throughout the Novel</p>
+                    <div class="weather-forecast">
+                        <div class="weather-day">
+                            <strong>Mon</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                        <div class="weather-day">
+                            <strong>Tue</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                        <div class="weather-day">
+                            <strong>Wed</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                        <div class="weather-day">
+                            <strong>Thu</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                        <div class="weather-day">
+                            <strong>Fri</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                        <div class="weather-day">
+                            <strong>Sat</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                        <div class="weather-day">
+                            <strong>Sun</strong><br>
+                            <small>[Mood]</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-title">Foreshadowing Corner</h3>
+                    <div class="section-content">
+                        <p>[Your 5+ sentence analysis of foreshadowing events and predictions readers can make...]</p>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="section-title">Gossip Section</h3>
+                    <div class="section-content">
+                        <div class="gossip-item">
+                            <strong>[Character Name]:</strong> "[Quote showing their feelings about another character or plot event]"
+                        </div>
+                        <div class="gossip-item">
+                            <strong>[Character Name]:</strong> "[Quote showing their feelings about another character or plot event]"
+                        </div>
+                        <div class="gossip-item">
+                            <strong>[Character Name]:</strong> "[Quote showing their feelings about another character or plot event]"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-section">
+            <div class="grid-item" onclick="toggleExpand('obituary')">
+                <h3 class="section-title">Obituary</h3>
+                <p class="section-content">[Brief preview of your obituary - could be physical death or death of relationship/friendship...]</p>
+                <button class="expand-btn">Read Full Obituary</button>
+                <div class="expandable-content" id="obituary">
+                    <p>[Your full 10+ sentence obituary written from first person POV or another character's perspective...]</p>
+                </div>
+            </div>
+
+            <div class="grid-item" onclick="toggleExpand('conflict')">
+                <h3 class="section-title">Major Conflict Analysis</h3>
+                <p class="section-content">[Brief preview of the major conflict in your novel...]</p>
+                <button class="expand-btn">Read Analysis</button>
+                <div class="expandable-content" id="conflict">
+                    <p>[Your full 10+ sentence analysis of major conflict, type of conflict, events, and resolution...]</p>
+                </div>
+            </div>
+
+            <div class="grid-item" onclick="toggleExpand('highlights')">
+                <h3 class="section-title">Novel Highlights</h3>
+                <p class="section-content">Themes, Symbols, and Motifs</p>
+                <button class="expand-btn">Explore Highlights</button>
+                <div class="expandable-content" id="highlights">
+                    <h4>Main Themes:</h4>
+                    <p>[Your analysis of themes...]</p>
+                    <h4>Key Symbols:</h4>
+                    <p>[Your analysis of symbols...]</p>
+                    <h4>Important Motifs:</h4>
+                    <p>[Your analysis of motifs...]</p>
+                </div>
+            </div>
+
+            <div class="grid-item" onclick="toggleExpand('characters')">
+                <h3 class="section-title">Character Highlights</h3>
+                <div class="character-highlight">
+                    <div class="character-image">[IMG]</div>
+                    <div>
+                        <strong>[Character 1 Name]</strong><br>
+                        <small>Click to read full analysis</small>
+                    </div>
+                </div>
+                <div class="character-highlight">
+                    <div class="character-image">[IMG]</div>
+                    <div>
+                        <strong>[Character 2 Name]</strong><br>
+                        <small>Click to read full analysis</small>
+                    </div>
+                </div>
+                <button class="expand-btn">Read Character Analysis</button>
+                <div class="expandable-content" id="characters">
+                    <h4>[Character 1 Name]</h4>
+                    <p>[Your 10+ sentence analysis including archetype, perspectives, flaws/challenges...]</p>
+                    <h4>[Character 2 Name]</h4>
+                    <p>[Your 10+ sentence analysis including archetype, perspectives, flaws/challenges...]</p>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <h3 class="section-title">Advertisements</h3>
+                <div class="ad-section">
+                    <h4>[Character Name]'s Deepest Desire</h4>
+                    <p>[Description of what they want most and why]</p>
+                    <small>[Visual description or actual image would go here]</small>
+                </div>
+                <div class="ad-section">
+                    <h4>[Character Name]'s Deepest Intent</h4>
+                    <p>[Description of their deepest intentions]</p>
+                    <small>[Visual description or actual image would go here]</small>
+                </div>
+            </div>
+
+            <div class="grid-item" onclick="toggleExpand('review')">
+                <h3 class="section-title">Novel Review</h3>
+                <p class="section-content">Final thoughts and recommendations</p>
+                <button class="expand-btn">Read Full Review</button>
+                <div class="expandable-content" id="review">
+                    <p>[Your 10+ sentence review explaining why you enjoyed/didn't enjoy the novel with concrete support linked to plot and development...]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleExpand(elementId) {
+            const element = document.getElementById(elementId);
+            const isExpanded = element.classList.contains('expanded');
+            
+            // Close all other expanded sections
+            const allExpanded = document.querySelectorAll('.expandable-content.expanded');
+            allExpanded.forEach(el => {
+                if (el.id !== elementId) {
+                    el.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle current section
+            if (isExpanded) {
+                element.classList.remove('expanded');
+            } else {
+                element.classList.add('expanded');
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Add pulse animation to expand buttons
+        document.querySelectorAll('.expand-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.classList.add('pulse');
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.classList.remove('pulse');
+            });
+        });
+
+        // Add click prevention for buttons inside clickable areas
+        document.querySelectorAll('.expand-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html>

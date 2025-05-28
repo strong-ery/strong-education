@@ -45,25 +45,25 @@
         /* Custom Cursor */
         .cursor {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.1s ease;
-            backdrop-filter: blur(2px);
-        }
-        
-        .cursor-trail {
-            position: fixed;
             width: 6px;
             height: 6px;
             background: var(--accent);
             border-radius: 50%;
             pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
             z-index: 9998;
             transition: all 0.15s ease;
+            backdrop-filter: blur(2px);
         }
         
         /* Navigation */
@@ -161,13 +161,14 @@
         .hero-title {
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 200;
-            line-height: 0.9;
+            line-height: 1.2;
             margin-bottom: 2rem;
             background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             opacity: 0;
             animation: fadeInUp 1.2s 0.4s ease forwards;
+            z-index: 1000;
         }
         
         .hero-description {
@@ -728,24 +729,24 @@
         // Custom cursor
         const cursor = document.querySelector('.cursor');
         const cursorTrail = document.querySelector('.cursor-trail');
-        
+
         let mouseX = 0, mouseY = 0;
         let trailX = 0, trailY = 0;
-        
+
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
             
-            cursor.style.left = mouseX - 10 + 'px';
-            cursor.style.top = mouseY - 10 + 'px';
+            cursor.style.left = mouseX - 3 + 'px';
+            cursor.style.top = mouseY - 3 + 'px';
         });
-        
+
         function animateTrail() {
-            trailX += (mouseX - trailX) * 0.1;
-            trailY += (mouseY - trailY) * 0.1;
+            trailX += (mouseX - trailX) * 0.75;
+            trailY += (mouseY - trailY) * 0.75;
             
-            cursorTrail.style.left = trailX - 3 + 'px';
-            cursorTrail.style.top = trailY - 3 + 'px';
+            cursorTrail.style.left = trailX - 10 + 'px';
+            cursorTrail.style.top = trailY - 10 + 'px';
             
             requestAnimationFrame(animateTrail);
         }

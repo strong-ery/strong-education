@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoking and Its Effects on the Respiratory System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .brochure {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="60" cy="10" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h2 {
+            font-size: 1.2em;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid #e74c3c;
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section h3 {
+            color: #e74c3c;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+        }
+        
+        .section p, .section ul {
+            margin-bottom: 15px;
+        }
+        
+        .section ul {
+            padding-left: 20px;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+        
+        .disease-box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #c0392b;
+        }
+        
+        .disease-box h4 {
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .references {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .references h3 {
+            color: #ecf0f1;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        .references p {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .student-info {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .highlight {
+            background: #ffe6e6;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="brochure">
+        <div class="header">
+            <h1>🚭 Smoking and the Respiratory System</h1>
+            <h2>Even More Harm Than You Think</h2>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h3>1. Physical Effects of Smoking (Not Diseases)</h3>
+                <p>Smoking can cause immediate, long term changes to the body that you will see and feel:</p>
+                <ul>
+                    <li><strong>Reduced lung capacity:</strong> The lungs hold less air because the air sacs (alveoli) get damaged and become less "elastic". This means you lose your breath much easier when exerting yourself, or even just walking up stairs.</li>
+                    <li><strong>Chronic cough and phlegm production:</strong> Your respiratory system tries to remove all the toxic chemicals by making extra mucus, which makes that nasty "smoker's cough" that never goes away.</li>
+                    <li><strong>Decreased oxygen transport:</strong> Carbon monoxide (CO) from any cigarette replaces oxygen in your red blood cells, so your body doesn't get the oxygen it needs. Thus making you feel tired and weak all the time.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>2. Three Major Diseases Caused by Smoking</h3>
+                
+                <div class="disease-box">
+                    <h4>Chronic Obstructive Pulmonary Disease (COPD)</h4>
+                    <p>COPD is actually two diseases: chronic bronchitis and emphysema. The toxic chemicals in cigarettes cause chronic inflammation in your bronchi (tubes that carry the air to your lungs), which makes them produce way too much mucus and makes the walls thick, and swollen. Meanwhile, the alveoli get destroyed and can no longer stretch and contract. This makes air gets trapped in your lungs and makes it so you can't breathe properly. People with COPD feel like they're suffocating even when they're just sitting still. My Grandma had COPD before she passed, so I've seen this disease secondhand.</p>
+                </div>
+
+                <div class="disease-box">
+                    <h4>Lung Cancer</h4>
+                    <p>Cigarettes have over 70 known carcinogens (cancer chemicals) that directly damage the DNA in your lung cells. When the cells try to repair themselves, they occaisonally make mistakes and start growing uncontrollably, making tumors. These cancer cells can block airways, and also sometimes spread to other parts of your respiratory system and body. Lung cancer usually doesn't show symptoms until it's later stage, which is why it's so deadly.</p>
+                </div>
+
+                <div class="disease-box">
+                    <h4>Pneumonia</h4>
+                    <p>Smoking destroys the cilia, which are tiny hairy structures that sweep bacteria and debris out of your lungs. Without them, harmful bacteria can easily get into your alveoli and cause infections. Your immune system also gets weakened by smoking, so it fights infections off worse than usual. The alveoli fill up with pus and fluid instead of air, making it extremely difficult to get oxygen into your bloodstream. This is why smokers get pneumonia more often and have a harder time recovering from it.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>3. Effects of Secondhand Smoke</h3>
+                <p>Even if you don't smoke, breathing in someone else's smoke is still harmful to YOUR respiratory system:</p>
+                <ul>
+                    <li><strong>Immediate irritation:</strong> Secondhand smoke contains the same toxic chemicals, making your airways inflamed and produce extra mucus. You might notice coughing, throat irritation, and difficulty breathing right away.</li>
+                    <li><strong>Increased infection risk:</strong> Just like with smokers, secondhand smoke paralyzes your cilia and weakens your immune system, which makes you more likely to get lung/respitory infections like bronchitis or pneumonia (or both).</li>
+                    <li><strong>Long term damage:</strong> Regular exposure to secondhand smoke can cause permanent damage to your lungs and raise your risk of developing the same diseases as smokers (because its almost like smoking, just less potent), including lung cancer and COPD, even though you may have never picked up a cigarette yourself.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>4. Regular Cigarettes vs. Vaporizers</h3>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Regular Cigarettes</th>
+                            <th>Vaporizers/E cigarettes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Combustion</strong></td>
+                            <td>Burns tobacco, creating tar and thousands of toxic chemicals</td>
+                            <td>Heats liquid to create vapor, no combustion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chemical Exposure</strong></td>
+                            <td>Over 7,000 chemicals, 70+ known carcinogens</td>
+                            <td>Fewer chemicals, but still contains harmful substances like formaldehyde and acetaldehyde</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lung Irritation</strong></td>
+                            <td>Severe irritation from tar and smoke particles</td>
+                            <td>Less irritation, but ultrafine particles can still damage alveoli</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nicotine Delivery</strong></td>
+                            <td>High nicotine levels, highly addictive</td>
+                            <td>Often higher nicotine levels than cigarettes, potentially more addictive</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <h4>⚠️ Vaping: Not Harmless, Just Different Harm</h4>
+                    <p>Even though vaping could seem safer since there's no smoke, it definitely opens up a whole new can of worms. Ultra fine particles in vape aerosol can get deep into your alveoli and cause inflammation. Some vaping products contain vitamin E acetate, which has been linked to serious lung injuries. Plus, many teens who vape get addicted to nicotine and then switch to regular cigarettes later. The long term effects are still unknown because vaping is so new, but early research suggests it can still cause respiratory problems, just different ones than cigarettes. It's sad to see this even in our school, but as more is researched into the effects, I suspect it will be cracked down on much more.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>5. Impact on Our Healthcare System</h3>
+                <p>Smoking puts a massive strain on Alberta's healthcare system in several ways:</p>
+                <ul>
+                    <li><strong>Increased wait times:</strong> Smoking related diseases like COPD, lung cancer, and heart disease require intensive, long term treatment. This means hospital beds, specialists, and medical equipment are tied up treating preventable diseases, making wait times longer for everyone else who needs care.</li>
+                    <li><strong>Resource allocation:</strong> A huge chunk of our healthcare budget goes toward treating smoking related illnesses. Money that could be spent on improving services, buying new equipment, or hiring more healthcare workers instead gets used up treating diseases that could have been prevented. This affects the quality of care available for all Albertans.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="references">
+            <h3>References (APA Format)</h3>
+            <p>Alberta Health Services. (2024). <em>Smoking cessation and respiratory health</em>. Government of Alberta.</p>
+            <p>Canadian Cancer Society. (2024). <em>Lung cancer statistics and smoking risks</em>. Canadian Cancer Society.</p>
+            <p>Canadian Lung Association. (2024). <em>COPD and smoking: Understanding the connection</em>. Canadian Lung Association.</p>
+            <p>Health Canada. (2024). <em>The health effects of secondhand smoke</em>. Government of Canada.</p>
+            <p>Public Health Agency of Canada. (2024). <em>Vaping products and health risks</em>. Government of Canada.</p>
+            <p>Statistics Canada. (2024). <em>Healthcare costs associated with smoking in Canada</em>. Government of Canada.</p>
+        </div>
+
+        <div class="student-info">
+            <p><strong>Effects of Smoking and Vaping</strong></p>
+        </div>
+    </div>
+</body>
+</html>

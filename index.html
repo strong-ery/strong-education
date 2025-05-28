@@ -130,55 +130,95 @@
             width: 100%;
         }
         
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 0 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            opacity: 0;
-            animation: fadeInUp 1.2s ease forwards;
-        }
-        
-        .hero-subtitle {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--text-tertiary);
-            margin-bottom: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1.2s 0.2s ease forwards;
-        }
-        
-        .hero-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 200;
-            line-height: 1.2;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0;
-            animation: fadeInUp 1.2s 0.4s ease forwards;
-            z-index: 1000;
-        }
-        
-        .hero-description {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-            max-width: 500px;
-            opacity: 0;
-            animation: fadeInUp 1.2s 0.6s ease forwards;
-        }
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    opacity: 0;
+    animation: fadeInUp 1.2s ease forwards;
+    width: 100%;
+}
+
+/* New container for subtitle, title, description */
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px; /* smaller than hero-content for neatness */
+}
+
+/* Updated container for full viewport width */
+.hero-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    max-width: 1400px;
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeInUp 1.2s 0.4s ease forwards;
+    position: relative;
+}
+
+.hero-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeInUp 1.2s 0.2s ease forwards;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 200;
+    line-height: 1.2;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 1000;
+    flex: none;
+    margin-bottom: 1rem;
+}
+
+.hero-sword {
+    margin-left: auto;
+    height: clamp(500px, 50vh, 700px);
+    width: auto;
+    filter: drop-shadow(0 0 20px rgba(37, 99, 235, 0.4)) 
+            drop-shadow(0 0 40px rgba(37, 99, 235, 0.2))
+            drop-shadow(0 0 80px rgba(37, 99, 235, 0.1));
+    transition: all 0.5s ease;
+    animation: swordGlow 3s ease-in-out infinite alternate;
+    flex-shrink: 0;
+}
+
+.hero-sword:hover {
+    filter: drop-shadow(0 0 30px rgba(37, 99, 235, 0.6)) 
+            drop-shadow(0 0 60px rgba(37, 99, 235, 0.3))
+            drop-shadow(0 0 120px rgba(37, 99, 235, 0.15));
+    transform: scale(1.05) rotate(2deg);
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    /* max-width moved to hero-text container */
+    opacity: 0;
+    animation: fadeInUp 1.2s 0.6s ease forwards;
+}
         
         .hero-cta {
             display: inline-flex;
@@ -424,6 +464,19 @@
             }
         }
         
+        @keyframes swordGlow {
+            0% { 
+                filter: drop-shadow(0 0 20px rgba(37, 99, 235, 0.4)) 
+                        drop-shadow(0 0 40px rgba(37, 99, 235, 0.2))
+                        drop-shadow(0 0 80px rgba(37, 99, 235, 0.1));
+            }
+            100% { 
+                filter: drop-shadow(0 0 25px rgba(37, 99, 235, 0.5)) 
+                        drop-shadow(0 0 50px rgba(37, 99, 235, 0.25))
+                        drop-shadow(0 0 100px rgba(37, 99, 235, 0.12));
+            }
+        }
+        
         @keyframes float {
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(-10px); }
@@ -454,6 +507,18 @@
             .hero {
                 padding: 0 1rem;
                 text-align: left;
+            }
+            
+            .hero-title-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .hero-sword {
+                height: clamp(200px, 40vh, 300px);
+                align-self: center;
+                margin-left: 0;
             }
             
             .section {
@@ -508,7 +573,10 @@
     <section class="hero" id="hero">
         <div class="hero-content">
             <div class="hero-subtitle">student • developer • creator</div>
-            <h1 class="hero-title">Dylan Strong</h1>
+            <div class="hero-title-container">
+                <h1 class="hero-title">Dylan Strong</h1>
+                <img src="sword.png" alt="Sword" class="hero-sword">
+            </div>
             <p class="hero-description">
                 Making things that work. Student learning computer science and mechanics, 
                 one project at a time.

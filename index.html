@@ -514,6 +514,46 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        .quotes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        }
+
+        .quote-card {
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 1rem;
+        padding: 2rem;
+        backdrop-filter: blur(8px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        }
+
+        .quote-card:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: var(--accent);
+        transform: translateY(-4px);
+        }
+
+        .quote-text {
+        font-size: 1.1rem;
+        font-weight: 300;
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        }
+
+        .quote-author {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        color: var(--text-tertiary);
+        text-align: right;
+        }
+
         
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -803,6 +843,29 @@
             </div>
         </div>
     </section>
+
+    <!-- Quote Section -->
+    <section class="section" id="quotes">
+        <div class="section-header reveal">
+        <div class="section-subtitle">04 — quotes</div>
+        <h2 class="section-title">Words Worth Remembering</h2>
+        </div>
+        <div class="quotes-grid reveal">
+        <div class="quote-card">
+            <p class="quote-text">“The only way to do great work is to love what you do.”</p>
+            <div class="quote-author">— Steve Jobs</div>
+        </div>
+        <div class="quote-card">
+            <p class="quote-text">“Simplicity is the ultimate sophistication.”</p>
+            <div class="quote-author">— Leonardo da Vinci</div>
+        </div>
+        <div class="quote-card">
+            <p class="quote-text">“Stay hungry, stay foolish.”</p>
+            <div class="quote-author">— Steve Jobs</div>
+        </div>
+        </div>
+    </section>
+  
     
     <!-- Footer -->
     <footer class="footer">

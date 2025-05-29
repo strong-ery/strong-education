@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Newspaper Template</title>
+    <title>Siddhartha - Newsletter</title>
     <style>
         * {
             margin: 0;
@@ -242,6 +242,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .grid-item::before {
@@ -287,25 +288,6 @@
             box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
         }
 
-        .expandable-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease;
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            border-radius: 0 0 10px 10px;
-        }
-
-        .expandable-content.expanded {
-            max-height: 1000px;
-            padding: 25px;
-        }
-
-        .full-story {
-            font-size: 1.1em;
-            line-height: 1.7;
-            color: #444;
-        }
-
         .gossip-item {
             background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
             margin: 10px 0;
@@ -331,6 +313,8 @@
         .character-image {
             width: 80px;
             height: 80px;
+            min-width: 80px;
+            min-height: 80px;
             border-radius: 50%;
             background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
             display: flex;
@@ -339,6 +323,7 @@
             color: white;
             font-weight: bold;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .character-highlight:hover .character-image {
@@ -361,6 +346,122 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
+        .ad-section p {
+            padding-bottom: 5px;
+            padding-top: 5px;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 800px;
+            max-height: 80vh;
+            width: 90%;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.7) translateY(50px);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .popup-header {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px 15px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .popup-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        .popup-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .popup-body {
+            padding: 30px;
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .popup-body h3 {
+            color: #d63031;
+            margin: 20px 0 10px 0;
+            font-size: 1.4em;
+        }
+
+        .popup-body h4 {
+            color: #e17055;
+            margin: 15px 0 8px 0;
+            font-size: 1.2em;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -372,6 +473,15 @@
             
             .newspaper-title {
                 font-size: 2em;
+            }
+
+            .popup-content {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .popup-body {
+                padding: 20px;
             }
         }
 
@@ -389,26 +499,22 @@
 <body>
     <div class="newspaper">
         <header class="header">
-            <h1 class="newspaper-title">[YOUR NEWSPAPER TITLE]</h1>
-            <p class="newspaper-subtitle">Daily Edition • [DATE] • Novel Edition</p>
+            <h1 class="newspaper-title">THE RIVERSIDE HERALD</h1>
+            <p class="newspaper-subtitle">Daily Edition • 483 BC • Novel Edition</p>
         </header>
 
         <div class="main-content">
-            <div class="main-story" onclick="toggleExpand('main-story')">
+            <div class="main-story" onclick="openPopup('main-story-popup')">
                 <div class="story-image">
-                    [MAIN STORY IMAGE]
+                    <img src="blog_river.jpg" alt="River scene">
                 </div>
                 <div class="story-content">
-                    <h2 class="headline">[YOUR MAIN HEADLINE]</h2>
-                    <p class="story-preview">[Your story preview text here - this should be engaging and make readers want to click to read more...]</p>
-                    <button class="expand-btn">Read Full Story</button>
-                </div>
-                <div class="expandable-content" id="main-story">
-                    <div class="full-story">
-                        <h3>The Author's Main News Report</h3>
-                        <p><strong>Universal Thesis:</strong> [Your universal thesis statement here]</p>
-                        <p>[Your full 12+ sentence report as the author convincing readers to read your novel. Include plot summary and deeper meaning...]</p>
-                    </div>
+                    <h2 class="headline">Siddhartha Finds Peace at the River</h2>
+                    <p class="story-preview">Siddhartha was a young Brahmin with every gift a young man could want. Beauty, intelligence, admiration, but he was deeply unhappy. Regardless of the praise from his teachers and the never ending love from his peers, he felt a deep void within himself. He felt a thirst, not for surface-level success, but for the real truth. Of life, of God, of Siddhartha. This thirst brought him away from his comfortable home, and his loving family, into the forest. In the forest, he became an ascetic Samana, and starved his body in the hope of feeding his soul.
+                    But even that was insufficient for Siddhartha. He came to realize that no external teaching, no matter its true holiness, could grant him his deepest desire. Not even the Buddha, whom he deeply respected, could show him his way. Siddhartha had come to believe enlightenment couldn’t be taught; it had to be experienced.
+                    So he took his first steps alone, leaving the faithful “lifelong” friend Govinda behind, with the Buddha. As he wandered, he was captured by the beauty of the world, the unity, and the simplicity of it. The trees, the sunlight, and the song of the River. Unknowingly, he was nearing the truth, but he was not yet ready to receive it.
+                    </p>
+                    <button class="expand-btn" onclick="event.stopPropagation(); openPopup('main-story-popup')">Read Full Story</button>
                 </div>
             </div>
 
@@ -419,31 +525,31 @@
                     <div class="weather-forecast">
                         <div class="weather-day">
                             <strong>Mon</strong><br>
-                            <small>[Mood]</small>
+                            <small>Curious</small>
                         </div>
                         <div class="weather-day">
                             <strong>Tue</strong><br>
-                            <small>[Mood]</small>
+                            <small>Restless</small>
                         </div>
                         <div class="weather-day">
                             <strong>Wed</strong><br>
-                            <small>[Mood]</small>
+                            <small>Seeking</small>
                         </div>
                         <div class="weather-day">
                             <strong>Thu</strong><br>
-                            <small>[Mood]</small>
+                            <small>Lost</small>
                         </div>
                         <div class="weather-day">
                             <strong>Fri</strong><br>
-                            <small>[Mood]</small>
+                            <small>Desperate</small>
                         </div>
                         <div class="weather-day">
                             <strong>Sat</strong><br>
-                            <small>[Mood]</small>
+                            <small>Awakening</small>
                         </div>
                         <div class="weather-day">
                             <strong>Sun</strong><br>
-                            <small>[Mood]</small>
+                            <small>Peaceful</small>
                         </div>
                     </div>
                 </div>
@@ -451,7 +557,7 @@
                 <div class="sidebar-section">
                     <h3 class="section-title">Foreshadowing Corner</h3>
                     <div class="section-content">
-                        <p>[Your 5+ sentence analysis of foreshadowing events and predictions readers can make...]</p>
+                        <p>Many key events in Siddhartha are subtly foreshadowed along the novel. Early on, Siddhartha’s distaste for traditional teachings gives hints at his future decision to abandon all external doctrines in the pursuit for his own truth. His repeated encounters with the River, going from admiring it, then returning to it, foreshadow deep significance spiritually and the role it plays in his eventual enlightenment. When he rejects the Buddha’s path, despite acknowledging his unquestionable holiness, also suggests that his journey must be uniquely his own, highlighting the pattern of separation that encompasses his path. His initial pride and spiritual ambition hint at the painful fall he will have to take on through sin, lust, and materialism. From the beginning, readers can begin to sense that Siddhartha’s search will be long, winding, and fruitless for a long while. And that only by surrendering his control, will he find what he’s always longed for.</p>
                     </div>
                 </div>
 
@@ -459,13 +565,13 @@
                     <h3 class="section-title">Gossip Section</h3>
                     <div class="section-content">
                         <div class="gossip-item">
-                            <strong>[Character Name]:</strong> "[Quote showing their feelings about another character or plot event]"
+                            <strong>Govinda:</strong> “He left again. One day he’s meditating, the next he’s off chasing enlightenment in a different part of the woods. I just hope he finds what he’s looking for…”
                         </div>
                         <div class="gossip-item">
-                            <strong>[Character Name]:</strong> "[Quote showing their feelings about another character or plot event]"
+                            <strong>Kamala:</strong> “He was the best merchant I ever had. He was sharp, confident, and driven. But then he just walked out like money didn’t matter. Must’ve hit his head on that river.”
                         </div>
                         <div class="gossip-item">
-                            <strong>[Character Name]:</strong> "[Quote showing their feelings about another character or plot event]"
+                            <strong>Kamaswami:</strong> “He wanted me, then wanted wisdom. Typical. But I’ll admit: he looked more at peace sleeping by the river than he ever did in silk.”
                         </div>
                     </div>
                 </div>
@@ -473,109 +579,220 @@
         </div>
 
         <div class="grid-section">
-            <div class="grid-item" onclick="toggleExpand('obituary')">
+            <div class="grid-item" onclick="openPopup('obituary-popup')">
                 <h3 class="section-title">Obituary</h3>
-                <p class="section-content">[Brief preview of your obituary - could be physical death or death of relationship/friendship...]</p>
-                <button class="expand-btn">Read Full Obituary</button>
-                <div class="expandable-content" id="obituary">
-                    <p>[Your full 10+ sentence obituary written from first person POV or another character's perspective...]</p>
-                </div>
+                <p class="section-content"><strong>The Death of the Lustful Man</strong><br><i>As witnessed by the River</i></p>
+                <button class="expand-btn" onclick="event.stopPropagation(); openPopup('obituary-popup')">Read Full Obituary</button>
             </div>
 
-            <div class="grid-item" onclick="toggleExpand('conflict')">
+            <div class="grid-item" onclick="openPopup('conflict-popup')">
                 <h3 class="section-title">Major Conflict Analysis</h3>
-                <p class="section-content">[Brief preview of the major conflict in your novel...]</p>
-                <button class="expand-btn">Read Analysis</button>
-                <div class="expandable-content" id="conflict">
-                    <p>[Your full 10+ sentence analysis of major conflict, type of conflict, events, and resolution...]</p>
-                </div>
+                <p class="section-content">
+                From the moment I gained awareness of myself, I couldn’t shake the feeling that something was missing. I knew something was.
+                </p>
+                <button class="expand-btn" onclick="event.stopPropagation(); openPopup('conflict-popup')">Read Analysis</button>
             </div>
 
-            <div class="grid-item" onclick="toggleExpand('highlights')">
+            <div class="grid-item" onclick="openPopup('highlights-popup')">
                 <h3 class="section-title">Novel Highlights</h3>
-                <p class="section-content">Themes, Symbols, and Motifs</p>
-                <button class="expand-btn">Explore Highlights</button>
-                <div class="expandable-content" id="highlights">
-                    <h4>Main Themes:</h4>
-                    <p>[Your analysis of themes...]</p>
-                    <h4>Key Symbols:</h4>
-                    <p>[Your analysis of symbols...]</p>
-                    <h4>Important Motifs:</h4>
-                    <p>[Your analysis of motifs...]</p>
-                </div>
+                <p class="section-content">Each symbol ever-deepens the novel’s core lesson: that peace isn’t achieved through conquest, but through listening, surrender, and ultimately faith.</p>
+                <button class="expand-btn" onclick="event.stopPropagation(); openPopup('highlights-popup')">Explore Highlights</button>
             </div>
 
-            <div class="grid-item" onclick="toggleExpand('characters')">
+            <div class="grid-item" onclick="openPopup('characters-popup')">
                 <h3 class="section-title">Character Highlights</h3>
                 <div class="character-highlight">
-                    <div class="character-image">[IMG]</div>
+                    <div class="character-image">S</div>
                     <div>
-                        <strong>[Character 1 Name]</strong><br>
-                        <small>Click to read full analysis</small>
+                        <strong>Siddhartha</strong><br>
+                        <small>The seeker/tragic hero - Siddhartha represents the tragic hero, not because he is destroyed or killed, but due to the fact that he must lose everything to gain what truly matters.</small>
                     </div>
                 </div>
                 <div class="character-highlight">
-                    <div class="character-image">[IMG]</div>
+                    <div class="character-image">V</div>
                     <div>
-                        <strong>[Character 2 Name]</strong><br>
-                        <small>Click to read full analysis</small>
+                        <strong>Vasudeva</strong><br>
+                        <small>The mentor/holy man - Vasudeva is the silent guide of Siddhartha’s final shedding/transformation. As the ferryman, he transports people in a physical sense. But symbolically, he guides them across spiritual boundaries.</small>
                     </div>
                 </div>
-                <button class="expand-btn">Read Character Analysis</button>
-                <div class="expandable-content" id="characters">
-                    <h4>[Character 1 Name]</h4>
-                    <p>[Your 10+ sentence analysis including archetype, perspectives, flaws/challenges...]</p>
-                    <h4>[Character 2 Name]</h4>
-                    <p>[Your 10+ sentence analysis including archetype, perspectives, flaws/challenges...]</p>
-                </div>
+                <button class="expand-btn" onclick="event.stopPropagation(); openPopup('characters-popup')">Read Character Analysis</button>
             </div>
 
             <div class="grid-item">
                 <h3 class="section-title">Advertisements</h3>
                 <div class="ad-section">
-                    <h4>[Character Name]'s Deepest Desire</h4>
-                    <p>[Description of what they want most and why]</p>
-                    <small>[Visual description or actual image would go here]</small>
+                    <h4>Govinda</h4>
+                    <p>To follow a spiritual path and find enlightenment through devotion.</p>
+                    <small>Still Searching? Join the Path of the Devoted. Follow the Buddha, your master; follow the truth! But will you recognize it when it stands before you?</small>
                 </div>
                 <div class="ad-section">
-                    <h4>[Character Name]'s Deepest Intent</h4>
-                    <p>[Description of their deepest intentions]</p>
-                    <small>[Visual description or actual image would go here]</small>
+                    <h4>Kamaswami</h4>
+                    <p>To gain control and satisfaction through wealth and trade.</p>
+                    <small>Success is everything. Or is it? Kamaswami Enterprises: Where every deal has a cost. Luxury, profit, and the hollow promise of fulfillment (now available in silk).</small>
                 </div>
             </div>
 
-            <div class="grid-item" onclick="toggleExpand('review')">
+            <div class="grid-item" onclick="openPopup('review-popup')">
                 <h3 class="section-title">Novel Review</h3>
-                <p class="section-content">Final thoughts and recommendations</p>
-                <button class="expand-btn">Read Full Review</button>
-                <div class="expandable-content" id="review">
-                    <p>[Your 10+ sentence review explaining why you enjoyed/didn't enjoy the novel with concrete support linked to plot and development...]</p>
-                </div>
+                <p class="section-content">I enjoyed the book a lot. It’s probably my favourite book ever. Siddhartha’s themes of spiritual connection, battling oneself, and overcoming sin are some of the most relatable things I’ve ever read. I felt very connected to the story because of that. And the ending, where Siddhartha finally sees unity and rebirth in the world, realizes everything is beautiful, that time is an illusion, and our perception of it is what makes each moment meaningful; that's DEEP.</p>
+                <button class="expand-btn" onclick="event.stopPropagation(); openPopup('review-popup')">Read Full Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Modals -->
+    <div class="popup-overlay" id="main-story-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Siddhartha Finds Peace at the River</h2>
+                <button class="close-btn" onclick="closePopup('main-story-popup')">&times;</button>
+            </div>
+            <div class="popup-body">
+                <h3>The Author's Main News Report</h3>
+                <p><strong>Universal Thesis: Wisdom cannot be taken, it must be allowed to arrive, like the river’s current that carries us only when we stop struggling against it.</strong></p>
+                <p>Siddhartha was a young Brahmin with every gift a young man could want. Beauty, intelligence, admiration, but he was deeply unhappy. Regardless of the praise from his teachers and the never ending love from his peers, he felt a deep void within himself. He felt a thirst, not for surface-level success, but for the real truth. Of life, of God, of Siddhartha. This thirst brought him away from his comfortable home, and his loving family, into the forest. In the forest, he became an ascetic Samana, and starved his body in the hope of feeding his soul.
+                But even that was insufficient for Siddhartha. He came to realize that no external teaching, no matter its true holiness, could grant him his deepest desire. Not even the Buddha, whom he deeply respected, could show him his way. Siddhartha had come to believe enlightenment couldn’t be taught; it had to be experienced.
+                So he took his first steps alone, leaving the faithful “lifelong” friend Govinda behind, with the Buddha. As he wandered, he was captured by the beauty of the world, the unity, and the simplicity of it. The trees, the sunlight, and the song of the River. Unknowingly, he was nearing the truth, but he was not yet ready to receive it.
+                Then, the Devil; temptation struck. In the town across from the River, Siddhartha witnessed a beautiful woman named Kamala, and succumbed to lust, and materialistic ideals. He “learned the art of love”, earned big money, dressed in silk, and lived on indulgence. But this way of living slowly drained him. The more he nourished his desires, the more hollow he felt and became. Eventually, he couldn’t bury his disgust for himself any longer. The wise seeker had become a man of greed.
+                He abandoned everything and returned to the river, broken physically, and spiritually empty. There, at the water’s edge, he saw his reflection and despised what he had become. With death on his mind, the River, with its infinite patience and its endless and eternal flow, sang to him: Om. That sacred sound, unity and peace itself, stopped him. He slept like the dead, for what “felt like 100 years”, and awoke the same man, but with a cleansed soul, and a new mind. 
+                Govinda, now a Buddhist monk, unknowingly watched over him out of concern for his safety from across the water. And when SIddhartha rushed to (finally) ask the ferryman, Vasudeva, to teach him about the river, that’s where his healing started. Siddhartha expressed his life, told his story, and then let Vasudeva take the reins. He listened, not to dogma, but to nature. Not to man, but the timeless voice Vasudeva had found within the River.
+                Years went by. Siddhartha lived simply, learning from the River, and Vasudeva, but peace was once again disturbed when that beautiful woman, Kamala arrived. She had been fatally bitten by a snake, and had brought their son with her. Suddenly, Siddhartha was a father. 
+                He loved the boy very much, but he was spoiled, and angry, and unwilling to just accept the big change from the lavish town life to Siddhartha's quiet life. Siddhartha clung to him and wouldn’t let go, hoping to guide him. But just as Siddhartha had once rejected his own father and family’s love to seek his path, so too did his son abandon him.
+                Siddhartha was devastated. Yet, through his suffering, Siddhartha was shown the cycle of life and pain, the inevitability of letting go. He finally realized that he could not protect his son from the same suffering he did, because it was the very suffering that would lead him to wisdom.
+                After Siddhartha's painful experience with growth, Vasudeva left, since he completed his purpose. By himself, Siddhartha sat with the River. In time, he heard it; not just the sound, but the MEANING. He saw the falseness of time, the existence of all things simultaneously. Joy and sorrow, life and death, the child and the man. The river showed him that all the different voices he heard from it, were one. That all things are connected, and all moments are eternal.
+                He finally reached peace, not by changing and becoming something new, but by accepting what always was.
+                Siddhartha spent almost his whole life reaching, clawing, and really lusting for truth. He chased it through his teachers, through fasting, through his senses, through wealth and greed, even through fatherhood. But every attempt left him even emptier than before. He had failed to see that truth isn’t a possession, but something to witness; a blessing. It is like a beautiful animal: if we rush toward it with hunger, it flees. If we are patient, still, and humble, it may come near and reveal itself.
+                In the end, Siddhartha found peace, not by achieving, but by letting go. By flowing with life like the river, not against it. When he stopped seeking answers and just simply existed, he became open enough to receive them.
+                The lesson becomes clear: life is not a problem to be solved, or a treasure for the taking. It is something to be lived and listened to. The more we grasp, the more it slips through our fingers like the sands of time. But when we finally stop grasping; the truth may quietly arrive.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="obituary-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Obituary</h2>
+                <button class="close-btn" onclick="closePopup('obituary-popup')">&times;</button>
+            </div>
+            <div class="popup-body">
+                <p>This afternoon, I witnessed a death not of body, but of spirit. The man known as Siddhartha shed his old life; his old self. The man who came to me, bleeding greed and numbed by desire, is no longer walking this world. He drowned in illusions of money, and pleasure, and although his heart was still beating, he was truly lost. 
+                I sang to him, as I sing to all things. But, this time he was listening. He looked into my waters, and I reflected his wretched image back, not as he was, but as he had truly become. And in that very moment, the man who loved money, who spent and wasted years of his life of empty pleasures: died.
+                There wasn’t a funeral. There was no tears. Only silence, and my gentle truth: Om. He laid down his pride, his lust, and his arrogance, and let them drift away with me. What was left wasn’t a man reborn, but a man; unchained.
+                The world may have not noticed this death of sin. But I, the River, will always remember it. Because it was the first time he truly heard me. And the first time he truly heard himself.
+
+                A stone can become flesh, as a sinful man can become holy.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="conflict-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Major Conflict Analysis</h2>
+                <button class="close-btn" onclick="closePopup('conflict-popup')">&times;</button>
+            </div>
+            <div class="popup-body">
+                <p>Voice: Siddhartha, Conflict: Person vs. Self.<br><br>From the moment I gained awareness of myself, I couldn’t shake the feeling that something was missing. I knew something was. My mind thirsted for truth like a man thirsts for water in the desert. But regardless of how much I drank (taking in knowledge); teachings from the Brahmins, silence with the Samanas, even knowledge and a lecture from the Buddha himself, I was never satisfied. My soul yearned for something deeper, something pure.
+                So I ran. I left my home, my father, later on, my closest friend Govinda. Always searching, always restless. I exchanged a simple life for riches, my goal of enlightenment for lust, my wisdom for noise. I drowned myself in hollow pleasures, money, wine, and gambling. Years passed, I was deaf and blind to the truth. I ran after false victories, and wore my spiritual starvation like a fine robe.
+                But the battle; my battle. Was never with the world. It was always with myself. The change finally came when I abandoned that life. I walked through the forest, and came to stand beside the River I originally crossed to reach my wretched town. For the first time, I didn’t try to understand it, or seek to own it. I just listened. The river sang to me not in words, but truth that is timeless: Om. I saw every part of me in my darkest moment: the thinker, the sinner, the seeker. They weren’t enemies, but parts of a whole. Parts of the Self. When I stopped resisting, the lifelong battle ended.
+                On my fateful day, the version of me who fought so hard for answers was overcome, and died. A man who simply listened was born. The conflict of my life wasn’t “won”, but it was changed, and through unity, I finally knew peace.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="highlights-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Novel Highlights</h2>
+                <button class="close-btn" onclick="closePopup('highlights-popup')">&times;</button>
+            </div>
+            <div class="popup-body">
+                <h4>Main Themes:</h4>
+                <p><strong>Illusion Of Control:</strong> Siddhartha eventually comes to understand that true peace comes not from the domination of life, but in the surrender to its flow.
+                <br><br><strong>Spiritual Restlessness and Fulfillment:</strong> The book is about a restless soul who can’t stop seeking, only to come to find that stillness contains the answer they were looking for.
+                <br><br><strong>Unity and Duality:</strong> Everything is connected: joy and sorrow, gain and loss, time and timelessness.
+                </p>
+                <h4>Key Symbols and Important Motifs:</h4>
+                <p><strong>The River:</strong> The River represents time, unity, and the endless and eternal flow of life. It speaks the truth, but only to those who listen.
+                <br><br><strong>“Om”:</strong> A sacred sound that symbolizes unity in everything. Hearing it marks a moment of awakening.
+                <br><br><strong>Shadows and Reflections:</strong> They reflect Siddhartha’s internal struggle(s) and the illusion of identity throughout his journey.
+                </p>
+                <h4>How Does This Connect?:</h4>
+                <p>Each symbol ever-deepens the novel’s <strong>core lesson:</strong> that peace isn’t achieved through conquest, but through listening, surrender, and ultimately faith. The river especially, becomes a “living” teacher: silent but all-knowing, leading Siddhartha to enlightenment.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="characters-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Character Analysis</h2>
+                <button class="close-btn" onclick="closePopup('characters-popup')">&times;</button>
+            </div>
+            <div class="popup-body">
+                <h4>Siddhartha - Tragic Hero</h4>
+                <p>Siddhartha represents the tragic hero, not because he is destroyed or killed, but due to the fact that he must lose everything to gain what truly matters. His life was marked by constant rise and fall: from an adored Brahmin son, to a starving ascetic, to a man lost in wealth, and ultimately: lust/greed. Every time he reaches a peak, he just finds emptiness, and thus, he falls again. This cycle represents the main conflict of the story: the search for peace through external answers, which ALWAYS leads to disillusionment. 
+                Siddhartha’s perspective shifts very dramatically throughout the story. He begins with his belief in intellectual knowledge and teachings. Then he rejects them, and believes only first hand experience can lead to the truth. Later, he abandons even that in favour of surrender. He realizes that truth is not something to conquer, but something to allow.
+                His greatest flaw is his lust for answers: his desperate requirement to grasp enlightenment. Ironically, that obsession of his ends up blinding him. It leads him to leave people who love him, and to fall into a meaningless life of pure indulgence, and to lose himself altogether. But his growth comes when he lets go. At the river, Siddhartha suddenly becomes quiet. He just stops chasing. And he starts listening. That is the moment when he becomes whole: not by overcoming and conquering the world, but by becoming a part of it.
+                </p>
+                <h4>Vasudeva - Mentor/Holy Man</h4>
+                <p>Vasudeva is the silent guide of Siddhartha’s final shedding/transformation. As the ferryman, he transports people in a physical sense. But symbolically, he guides them across spiritual boundaries. His archetype as a mentor shows up in his patience, lack of ego, and his strong ability to listen. He doesn’t teach with sermons; he teaches by example, and by opening the door for others to hear the beautiful song of the River.
+                His worldview is built on top of acceptance and unity. He views time in a non-linear fashion, and instead as an illusion. He hears every piece of the River’s voice: joy, sorrow, birth, and death, and understands that peace lies in embracing everything as one. He represents the patience, and the stillness that Siddhartha was missing.
+                While he has few personal flaws, his biggest challenge is helping Siddhartha through his suffering (especially with the pain caused by his rebel son.) Vasudeva offers no advice or control; only compassion. Even in those moments, he trusted that life would flow as it should. And eventually once Siddhartha finally understood the River’s wisdom, Vasudeva knew his role was complete, and disappeared into the forest, like a ripple fading into the current.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="review-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Novel Review</h2>
+                <button class="close-btn" onclick="closePopup('review-popup')">&times;</button>
+            </div>
+            <div class="popup-body">
+                <p>I enjoyed the book a lot. It’s probably my favourite book ever. Siddhartha’s themes of spiritual connection, battling oneself, and overcoming sin are some of the most relatable things I’ve ever read. I felt very connected to the story because of that. And the ending, where Siddhartha finally sees unity and rebirth in the world, realizes everything is beautiful, that time is an illusion, and our perception of it is what makes each moment meaningful; that's DEEP. It actually shifted how I think about life. I’ve never had a book do that, especially not one that lines up with stuff I’m personally going through, like faith and internal conflict. That’s what makes this book incredible to me. What made it effective was its language, pacing, and how the themes were handled. Even if someone couldn’t relate to the same things I did, I think it would still hold up and stay meaningful. The plot points like when Siddhartha chooses knowledge over his father’s wishes, when he questions and rejects teachings, or when he hates who he becomes after chasing pleasure, all show deep character development. The whole story is about unity. Like I said: "In order to attain true peace you must align all parts of your Self. When you are born you are broken, but to achieve peace you need to be your own shadow."
+                <br><br>Siddhartha is a 10/10 book, and for anybody I couldn’t recommend it more.
+                </p>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleExpand(elementId) {
-            const element = document.getElementById(elementId);
-            const isExpanded = element.classList.contains('expanded');
-            
-            // Close all other expanded sections
-            const allExpanded = document.querySelectorAll('.expandable-content.expanded');
-            allExpanded.forEach(el => {
-                if (el.id !== elementId) {
-                    el.classList.remove('expanded');
+        function openPopup(popupId) {
+            const popup = document.getElementById(popupId);
+            popup.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            popup.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close popup when clicking on overlay
+        document.querySelectorAll('.popup-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = 'auto';
                 }
             });
-            
-            // Toggle current section
-            if (isExpanded) {
-                element.classList.remove('expanded');
-            } else {
-                element.classList.add('expanded');
-                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const activePopup = document.querySelector('.popup-overlay.active');
+                if (activePopup) {
+                    activePopup.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
             }
-        }
+        });
 
         // Add pulse animation to expand buttons
         document.querySelectorAll('.expand-btn').forEach(btn => {
@@ -585,13 +802,6 @@
             
             btn.addEventListener('mouseleave', function() {
                 this.classList.remove('pulse');
-            });
-        });
-
-        // Add click prevention for buttons inside clickable areas
-        document.querySelectorAll('.expand-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
             });
         });
     </script>

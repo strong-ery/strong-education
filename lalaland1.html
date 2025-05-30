@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La La Land - Letters Never Sent & Sliding Doors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #000000 50%, #000000 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Letter Section */
+        .letter-section {
+            background: linear-gradient(45deg, #000000 0%, #000000 100%);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(#2e002a, #14003b);
+            opacity: 1;
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .letter-header h2 {
+            font-size: 2.8em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+        }
+
+        .letter-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .letter-writing-area {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .letter-format {
+            background: #f8f9fa;
+            border-left: 4px solid #11002c;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .letter-format h3 {
+            color: #280023;
+            margin-bottom: 15px;
+        }
+
+        .letter-format ul {
+            margin-left: 20px;
+        }
+
+        .letter-format li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .letter-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            resize: vertical;
+            background: linear-gradient(to bottom, transparent 0%, transparent 28px, #e8f4f8 28px, #e8f4f8 30px, transparent 30px);
+            background-size: 100% 30px;
+            transition: border-color 0.3s ease;
+        }
+
+        .letter-textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0,123,255,0.2);
+        }
+
+        .letter-textarea::placeholder {
+            color: #000000;
+            font-style: italic;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .timeline-header h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .doors-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            perspective: 1000px;
+        }
+
+        .door {
+            width: 150px;
+            height: 200px;
+            margin: 0 20px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .door-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            backface-visibility: hidden;
+        }
+
+        .door-front {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            transform: rotateY(0deg);
+        }
+
+        .door-back {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            transform: rotateY(180deg);
+        }
+
+        .door.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .door:hover {
+            transform: translateY(-10px);
+        }
+
+        .door.flipped:hover {
+            transform: rotateY(180deg) translateY(-10px);
+        }
+
+        .door-label {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .timeline-display {
+            margin-top: 50px;
+            min-height: 600px;
+        }
+
+        .timeline-track {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            transform: translateX(-50%);
+            border-radius: 2px;
+            z-index: 9;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin: 40px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .timeline-event:nth-child(even) {
+            text-align: right;
+        }
+
+        .timeline-event:nth-child(even) .event-content {
+            margin-right: calc(50% + 30px);
+            margin-left: 0;
+        }
+
+        .timeline-event:nth-child(odd) .event-content {
+            margin-left: calc(50% + 30px);
+            margin-right: 0;
+        }
+
+        .event-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+            max-width: 400px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-actual .event-content {
+            border-color: #667eea;
+        }
+
+        .timeline-alternate .event-content {
+            border-color: #f5576c;
+        }
+
+        .event-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .event-dot {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid #667eea;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .timeline-alternate .event-dot {
+            border-color: #f5576c;
+        }
+
+        .event-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .timeline-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 100px;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .timeline-actual .timeline-title {
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(102, 126, 234, 0.2));
+            color: #667eea;
+        }
+
+        .timeline-alternate .timeline-title {
+            background: linear-gradient(45deg, rgba(245, 87, 108, 0.1), rgba(245, 87, 108, 0.2));
+            color: #f5576c;
+        }
+
+        .sample-placeholder {
+            border: 2px dashed #ccc !important;
+            background: #f8f9fa !important;
+            opacity: 0.8;
+        }
+
+        .sample-placeholder .event-title::before {
+            content: "📝 EXAMPLE: ";
+            color: #999;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-event:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-event:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-event:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-event:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-event:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Hidden timelines */
+        .timeline-track.hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .timeline-event:nth-child(even) {
+                text-align: left;
+            }
+            
+            .timeline-event:nth-child(even) .event-content,
+            .timeline-event:nth-child(odd) .event-content {
+                margin-left: 40px;
+                margin-right: 20px;
+            }
+            
+            .timeline-line {
+                left: 20px;
+            }
+            
+            .event-dot {
+                left: 20px;
+            }
+            
+            .doors-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .door {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Section A: Letters Never Sent -->
+        <section class="letter-section">
+            <div class="letter-header">
+                <h2>Letters Never Sent</h2>
+                <p><strong>Task:</strong> Write 1 personal letter that Mia or Sebastian might have written to each other at different points in the story. Focus on internal conflict, regret, and unspoken thoughts to show your understanding of their characterization.</p>
+            </div>
+            
+            <div class="letter-writing-area">
+                <div class="letter-format">
+                    <h3>Letter Format Requirements:</h3>
+                    <ul>
+                        <li><strong>Salutation:</strong> Dear Mia,</li>
+                        <li><strong>Body:</strong> Minimum 300 words (Final count: 341)</li>
+                        <li><strong>Focus:</strong> Internal conflict, regret, unspoken thoughts</li>
+                        <li><strong>Closing:</strong> Love always,</li>
+                        <li><strong>Perspective:</strong> Sebastian</li>
+
+                        <li><strong>Inspiration:</strong> I wrote from the perspective of Sebastian, as it's easier for me to write from a male's perspective: as a male. I enjoyed this a lot. I love to talk about love, and such strong passion. I hope you like it!</li>
+                    </ul>
+                </div>
+                
+                <textarea 
+                    class="letter-textarea" 
+                    placeholder="Dear Mia,
+
+I'm not sure if you'll ever get to read this. Maybe that's why I'm writing it. Maybe it's much easier for me to say things when I don't expect to ever get a reply. I watched your plane take off today. I didn't mean to go to the airport, but I still did. I waited behind the glass, for just a few seconds, I found myself imagining what life we could've lived together if I had asked you to stay. If I had been so selfish.
+
+But I just couldn't. I had seen everything in your eyes that night when you got the call. Fear, disbelief, and wonder. And I knew that if I truly loved you the way I said I did, I had to let you go. Not because I wanted to, but because your dream mattered. Your happiness mattered. You mattered. You always have.
+
+What's funny is, I had used to believe both love and dreams could take the same path; perfectly intertwined. That if two souls could believe in each other enough, they could combine love with passion and make it work seamlessly. But, alas, sometimes believing in someone means giving them space enough to become who they’re truly meant to be. Even if you end up losing them, or they walk away from you. It's all worth it in the end. For you.
+
+I miss you. In the silences between the keys on my piano, in the smell of coffee that never quite tastes the same, and in the way the sun compliments the sidewalk on those old familiar streets we used to roam. I miss you in every melody I haven't yet written, because I think part of my music left with you.
+
+Perhaps one day, when the world gets quieter, and that harsh noise of success softens, we'll find each other somewhere in the crowd again. Or maybe we won't. Perhaps that one season was all we were ever meant to have.
+
+But it was enough to change me.
+
+Love always,
+Seb"></textarea>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
